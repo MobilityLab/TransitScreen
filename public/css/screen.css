@@ -1,0 +1,23 @@
+/* 
+    Document   : style
+    Created on : Nov 30, 2011, 12:49:05 PM
+    Author     : atpadmin
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root { 
+    display: block;
+}
+
+body {
+  background-color: #000;
+  font-family: Helvetica, Arial, sans-serif;
+  color:#eeeeee;
+}
+

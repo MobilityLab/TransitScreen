@@ -1,0 +1,147 @@
+/* 
+    Document   : style
+    Created on : Nov 30, 2011, 12:49:05 PM
+    Author     : atpadmin
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root { 
+    display: block;
+}
+
+body {
+  background-color: #eeeeee;
+  font-family: Helvetica, Arial, sans-serif;
+  color:#333333;
+}
+
+.msg {
+  width: 323px;
+  border-width: 1px;
+  border-style: solid;
+  padding: .4em;
+  margin-bottom: 20px;
+}
+
+.good-msg {
+  border-color:#27a702;
+  color:#27a702;
+  background-color:#cffec1;
+}
+
+
+#login-form {
+  width: 190px;
+  padding: 10px 20px 20px 20px;
+  background-color: #CCC;
+  margin: 150px auto;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;  
+}
+
+#screen-list .listing {
+  width: 335px;
+}
+
+#screen-list .listing .list-item {
+  border-bottom: 1px solid #CCC;
+  padding: .6em .5em;
+  list-style: none;
+}
+
+#screen-list .listing .list-item a,
+#screen-list .add-link {
+  display: inline-block;
+  text-transform: uppercase;
+  background-color: #999;
+  text-decoration: none;
+  padding: .2em .5em;
+  color: #EEE;
+  border-radius: 3px;
+  text-align: center;
+  width: 45px;
+  font-size: .7em;
+}
+#screen-list .listing .list-item a:hover,
+#screen-list .add-link:hover {
+  color: #bbb;
+}
+
+#screen-list .add-link {
+  position: relative;
+  top: 12px;
+  left: 211px;
+}
+
+#screen-list .screen-name {
+  display: inline-block;
+  width: 200px;
+}
+
+#screen-fields .edit-field label {
+  display: block;
+  float: left;
+  width: 240px;
+  color: #444;;
+  font-size: .9em;
+}
+
+#screen-fields .edit-field input,
+#screen-fields .stop-row input {
+  border: 1px solid #999999;
+  padding: .5em;
+}
+
+#screen-fields div.stop-row label {
+  display: block;
+  color: #333333;
+  float: left;
+  font-size: .7em;
+}
+
+#screen-fields div.stop-row .input-line {
+  clear: both;
+}
+
+#screen-fields div.stop-row .input-line select {
+  width: 100px;
+}
+
+#screen-fields .instructions{
+  color: #333;
+  font-size: .8em;
+  width: 325px;
+  float: right;
+}
+
+#screen-fields ol {
+  width: 435px;
+}
+
+#screen-fields ol .column-headers {
+  color: #333;
+  font-size: .8em;
+}
+
+#screen-fields ol .column-headers span {
+  display: inline-block;
+  width: 183px;
+  padding-left: 6px;
+}
+
+#screen-fields ol .column-headers #header-column {
+  width: 50px;
+  padding-left: 0;
+}
+
+#screen-fields ol select {
+  width: 50px;
+  border: 1px solid #999;
+  height: 29px;
+}
