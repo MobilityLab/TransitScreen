@@ -19,12 +19,16 @@ class Screen_model extends CI_Model {
   var $Su_op = '';
   var $Su_cl = '';
   var $name = '';
+  var $screen_version = 0;
   var $stop_ids = array();
+  var $pair_ids = array();
   var $stop_names = array();
   var $stop_columns = array();
+  var $stop_positions = array();
   var $new_stop_ids = array();
   var $new_stop_names = array();
   var $new_stop_columns = array();
+  var $new_stop_positions = array();
 
   public function __construct(){
     parent::__construct();
@@ -45,22 +49,46 @@ class Screen_model extends CI_Model {
     }
 
     //Query the block data
-    $this->db->select('id, stop, custom_name, column');
+    $this->db->select('id, stop, custom_name, column, position');
     //print $this->id; die;
     $q = $this->db->get_where('blocks',array('screen_id' => $this->id));
 
     //Place the data into the arrays of this object
     if ($q->num_rows() > 0) {
-      foreach($q->result() as $row){
+      foreach($q->result() as $row){                
+        $serialstops = $this->_assemble_stops($row->id);
+
         $newidrow[$row->id] = $row->stop;
+        //$newidrow[$row->id] = $serialstops;
         $newnamerow[$row->id] = $row->custom_name;
         $newcolumnrow[$row->id] = $row->column;
+        $newpositionrow[$row->id] = $row->position;
 
         $this->stop_ids[] = $newidrow[$row->id];
         $this->stop_names[] = $newnamerow[$row->id];
         $this->stop_columns[] = $newcolumnrow[$row->id];
+        $this->stop_positions[] = $newpositionrow[$row->id];
       }
     }
+  }
+
+  private function _assemble_stops($parentid){
+    $output = array();
+
+    $this->db->select('id, agency,stop_id');
+    $q = $this->db->get_where('agency_stop', array('block_id' => $parentid));
+
+    if($q->num_rows() > 0) {
+      foreach($q->result() as $row){
+        $rowarray['agency']   = $row->agency;
+        //$this->db->select('agency, stop_id'
+        //$arrstops = $this->db->get_where('agency_stop', array())
+        $rowarray['stop_id']  = $row->stop_id;
+
+        $output[$row->id] = $rowarray;
+      }
+    }
+    return $output;
   }
 
   // For now this function will get all screens
@@ -78,7 +106,7 @@ class Screen_model extends CI_Model {
   }
 
   public function get_screen_values($id) {
-    $this->db->select('id, MoTh_op, MoTh_cl, Fr_op, Fr_cl, Sa_op, Sa_cl, Su_op, Su_cl, name');
+    $this->db->select('id, MoTh_op, MoTh_cl, Fr_op, Fr_cl, Sa_op, Sa_cl, Su_op, Su_cl, name, screen_version');
     if($id == 0){
       $q = $this->db->get('screens',1);
     }
@@ -101,18 +129,24 @@ class Screen_model extends CI_Model {
       }
 
       // Now get the individual block data for this screen.
-      $this->db->select('id, stop, custom_name, column');
+      $this->db->select('id, stop, custom_name, column, position');
       $this->db->order_by('column', 'asc');
+      $this->db->order_by('position', 'asc');
       $q = $this->db->get_where('blocks',array('screen_id' => $id));
 
       if($q->num_rows() > 0){
         foreach($q->result() as $row){
+          $stopstring = '';
+          $stoppairs = $this->_assemble_stops($row->id);
+          foreach($stoppairs as $pairing){
+            $stopstring .= implode(':',$pairing) . ';';
+          }          
+          //$row->stop = substr($stopstring, 0, strlen($stopstring) - 1);
+          $row->stop = $stoppairs;
           $data['blocks'][] = $row;
         }
       }
-
       //print_r($data);die;
-
       return $data;
     }
   }
@@ -122,15 +156,16 @@ class Screen_model extends CI_Model {
     $msg = '';
 
     $data = array(
-      'MoTh_op' => $this->MoTh_op,
-      'MoTh_cl' => $this->MoTh_cl,
-      'Fr_op' => $this->Fr_op,
-      'Fr_cl' => $this->Fr_cl,
-      'Sa_op' => $this->Sa_op,
-      'Sa_cl' => $this->Sa_cl,
-      'Su_op' => $this->Su_op,
-      'Su_cl' => $this->Su_cl,
-      'name' => $this->name
+      'MoTh_op'         => $this->MoTh_op,
+      'MoTh_cl'         => $this->MoTh_cl,
+      'Fr_op'           => $this->Fr_op,
+      'Fr_cl'           => $this->Fr_cl,
+      'Sa_op'           => $this->Sa_op,
+      'Sa_cl'           => $this->Sa_cl,
+      'Su_op'           => $this->Su_op,
+      'Su_cl'           => $this->Su_cl,
+      'name'            => $this->name,
+      'screen_version'  => $this->screen_version
     );
 
     if($id > 0){ // If updating, instead of inserting anew...
@@ -142,24 +177,44 @@ class Screen_model extends CI_Model {
       $this->db->insert('screens',$data);
       $msg = 'created';
     }
-    
+    //print_r($this->pair_ids);
     // Block updates:
-    foreach($this->stop_ids as $key => $value){      
+    foreach($this->stop_ids as $key => $value){
       unset($blockdata);
+      $oldpairs = array();
+      $newpairs = array();
+
+      $k = explode(',',$this->pair_ids[$key]);
+      $stop_pairs = explode(';',$value);
+      foreach($stop_pairs as $skey => $svalue){
+        $as = explode(':',$svalue);
+        if(isset($k[$skey])){
+          $oldpairs[$k[$skey]] = array(
+              'agency'  => $as[0],
+              'stop_id' => $as[1]);
+        }
+        else {
+          $newpairs[] = array(
+              'agency'  => $as[0],
+              'stop_id' => $as[1]);
+        }
+      }
+
+      $this->_add_stop_pairs($oldpairs,$newpairs,$key);
+      //die;
+      
       $blockdata = array (
-        'stop'        => $value,
+        //'stop'        => $value,
         'custom_name' => $this->stop_names[$key],
-        'column'     => $this->stop_columns[$key]
+        'column'      => $this->stop_columns[$key],
+        'position'    => $this->stop_positions[$key]
       );
       
-      //print $blockdata['stop'] . ' | ' . $blockdata['custom_name'] . '<br/>';
-
-      if(strlen(trim($blockdata['stop'])) == 0 && strlen(trim($blockdata['custom_name'])) == 0){
-        //print "Delete $key: " . $blockdata['stop'] . ' | ' . $blockdata['custom_name'] . '<br/>';
+      if(strlen(trim($value)) == 0 && strlen(trim($blockdata['custom_name'])) == 0){        
+        $this->db->delete('agency_stop', array('block_id' => $key));
         $this->db->delete('blocks', array('id' => $key));
       }
-      else {        
-        //print "Update $key: " . $blockdata['stop'] . ' | ' . $blockdata['custom_name'] . '<br/>';
+      else {                
         $this->db->where('id', $key);
         $this->db->update('blocks', $blockdata);
       }      
@@ -169,16 +224,48 @@ class Screen_model extends CI_Model {
       unset($blockdata);
       if(strlen(trim($value)) > 0){
         $blockdata = array (
-          'stop'        => $value,
+          //'stop'        => $value,
           'custom_name' => $this->new_stop_names[$key],
           'screen_id'   => $id,
-          'column'      => $this->new_stop_columns[$key]
+          'column'      => $this->new_stop_columns[$key],
+          'position'    => $this->new_stop_positions[$key]
         );
+        
         $this->db->insert('blocks', $blockdata);
+        $newid = $this->db->insert_id();        
+
+        $stops = explode(';',$value);
+        foreach($stops as $stop){
+          $pairings = explode(':',$stop);
+          $newstop = array(
+              'agency'    => $pairings[0],
+              'stop_id'   => $pairings[1],
+              'block_id'  => $newid
+          );
+          $this->db->insert('agency_stop',$newstop);
+        }
       }
-    }
+    }    
         
     redirect("screen_admin/index/$msg");   
+  }
+
+  private function _add_stop_pairs($old, $new, $block_id){
+    //print_r($old);
+    //print "<p>$block_id</p>";
+
+    foreach($old as $key => $value){
+      if($key > 0){
+        $this->db->where('id', $key);
+        $this->db->update('agency_stop', $old[$key]);
+      }
+    }
+    foreach($new as $pair){
+      //print '<hr>';
+      $pair['block_id'] = $block_id;
+      //print_r($pair);
+      $this->db->insert('agency_stop',$pair);
+    }
   }
 
   public function is_asleep(){
@@ -209,10 +296,24 @@ class Screen_model extends CI_Model {
         }
         return false;
     }
-
   }
 
+  public function get_num_columns() {
+    $max = 0;
 
+    $this->db->select('column');
+    $q = $this->db->get_where('blocks',array('screen_id' => $this->id));
+
+    if($q->num_rows() > 0){
+      foreach($q->result() as $row){
+        $thiscol = $row->column;
+        if($thiscol > $max){
+          $max = $thiscol;
+        }
+      }
+    }
+    return $max;
+  }
 }
 
 ?>

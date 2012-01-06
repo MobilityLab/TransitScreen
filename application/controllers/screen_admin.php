@@ -35,10 +35,6 @@ class Screen_admin extends CI_Controller {
     $this->load->helper('render_admin');
     $this->load->model('screen_model');
 
-    //if(!isset($id)){  // Setting the id to 0 will signal the system that we intend to create a new record
-    // $id = 0;
-    //}
-
     $data['rows'] = $this->screen_model->get_screen_values($id);
     
     $data['main_content'] = 'screen_editor';
@@ -62,10 +58,8 @@ class Screen_admin extends CI_Controller {
 
     $updatevals->save_screen_values($id);
 
-  }
- 
+  } 
   
 }
-
 
 ?>

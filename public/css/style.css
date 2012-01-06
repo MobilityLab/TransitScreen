@@ -121,7 +121,7 @@ body {
 }
 
 #screen-fields ol {
-  width: 435px;
+  width: 490px;
 }
 
 #screen-fields ol .column-headers {
@@ -135,7 +135,7 @@ body {
   padding-left: 6px;
 }
 
-#screen-fields ol .column-headers #header-column {
+#screen-fields ol .column-headers .header-column {
   width: 50px;
   padding-left: 0;
 }

@@ -3,9 +3,7 @@
 class Screen extends CI_Controller {
 
   public function __construct() {
-
-    parent::__construct();
- 
+    parent::__construct(); 
   }
 
   public function index($screenid) {
@@ -22,13 +20,17 @@ class Screen extends CI_Controller {
     //Load variable of screen model type
     $screen->load_model($screenid);
 
+    $data['id'] = $screenid;
+
     // Check for sleep mode to determine the view
     if($screen->is_asleep()) {     
       $data['template'] = 'three_col';
     }
     else {
-      //Collect blocks
+      $data['numcols'] = $screen->get_num_columns();
 
+      /*
+      //Collect blocks
       $blocks = array();
       $newitem = array();
       $pairs = array();
@@ -46,7 +48,6 @@ class Screen extends CI_Controller {
         
         foreach($ids as $idpair){
           unset($newitem);
-          
 
           $agencyandid = explode(':', $idpair);
           $newitem = array(
@@ -56,7 +57,6 @@ class Screen extends CI_Controller {
           //print_r($newitem);
           $pairs[] = $newitem;
         }
-
         
         if(isset($stopnames[$s])){
           $blockname = $stopnames[$s];
@@ -71,18 +71,12 @@ class Screen extends CI_Controller {
         );
         $blocks[] = $newblock;
       }
-
-      $data['template'] = 'three_col';
-      $data['data'] = $blocks;
+      */    
 
     }
     $this->load->view('includes/screen_template', $data);
   }
 
-  
-
- 
-  
 }
 
 

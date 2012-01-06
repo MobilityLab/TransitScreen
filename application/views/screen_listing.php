@@ -12,7 +12,7 @@
       <div class="list-item"">
         <span class="screen-name"><?php print $r->name; ?></span>
         <?php echo anchor('screen_admin/edit/' . $r->id, 'edit', array('class' => 'edit-link')); ?>
-        <?php echo anchor('screen/view/' . $r->id, 'view', array('class' => 'view-link')); ?>
+        <?php echo anchor('screen/index/' . $r->id, 'view', array('class' => 'view-link')); ?>
       </div>
     <?php endforeach; ?>
   </div>
