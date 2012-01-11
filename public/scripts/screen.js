@@ -129,22 +129,45 @@ function generate_blocks() {
       output += '</div>';      
     }
 
+    if(blocks[key].type == 'custom'){
+      output += '<div id="block-' + blocks[key].id + '" class="' + containerclass + '">';
+      output +=   blocks[key].custom_body;
+      output += '</div>';   
+    }
+
     
-    if('vehicles' in blocks[key] || blocks[key].type == 'cabi'){
+    if('vehicles' in blocks[key] || blocks[key].type == 'cabi' || blocks[key].type == 'custom'){
       if($('#block-' + blocks[key].id).length > 0){
         $('#block-' + blocks[key].id).html(output);
       }
       else {
         //$("#results").append('<div class="block" id="block-' + blocks[key].id + '">' + output + '</div>');
-        $("#col-" + blocks[key].column).append('<div class="block" id="block-' + blocks[key].id + '">' + output + '</div>');
+        $("#col-" + blocks[key].column).append('<div class="block" id="block-' + blocks[key].id + '" order="' + blocks[key].order + '">' + output + '</div>');
       }
     }
     else {
       $('#block-' + blocks[key].id).empty();
     }
   }
+
+  reorder_blocks();
   
 }
+
+function reorder_blocks() {
+  $.each($('.col'), function(c,colm){
+    var mylist = $('#col-' + (c+1));
+    var listitems = mylist.children('.block').get();
+
+    listitems.sort(function(a, b) {
+      var compA = $(a).attr('order');
+      var compB = $(b).attr('order');
+      return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+    })
+    $.each(listitems, function(idx, itm) { mylist.append(itm); });
+  });
+}
+
 
 function translate_class_name(jsonname){
   switch(jsonname) {
@@ -154,7 +177,9 @@ function translate_class_name(jsonname){
     case 'metro':
       return 'metro';
     case 'cabi':
-      return 'cabi'
+      return 'cabi';
+    case 'custom':
+      return 'custom';
     default:
       return 'unknown';
   }

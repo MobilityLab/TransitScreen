@@ -69,6 +69,7 @@ CREATE TABLE blocks (
     screen_id integer NOT NULL,
     stop character varying(255),
     custom_name character varying(255),
+    custom_body text,
     "column" integer,
     "position" integer DEFAULT 0
 );

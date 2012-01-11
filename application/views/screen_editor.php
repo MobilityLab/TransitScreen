@@ -48,6 +48,7 @@
                 <li>ART: art</li>
                 <li>Circulator: dc-circulator</li>
                 <li>Capital Bikeshare: cabi</li>
+                <li>Custom text block: custom</li>
               </ul>
             </div>';
     $agencies = array(
@@ -57,7 +58,7 @@
         'art'           =>  'ART'
     );
     echo '<ol>';
-    echo '<div class="column-headers"><span>Stop IDs</span><span>Custom stop name (optional)</span><span class="header-column">Column</span><span class="header-column">Position</span></div>';
+    echo '<div class="column-headers"><span>Stop IDs</span><span>Custom stop name (opt.)</span><span class="header-column">Column</span><span class="header-column">Position</span><span class="header-column-ct">Custom text</span></div>';
     for($r = 0; $r < 9; $r++) {
       
       $coloptions = array(
@@ -95,12 +96,14 @@
         echo form_input('stop_names[' . $rows['blocks'][$r]->id . ']', $rows['blocks'][$r]->custom_name);
         echo form_dropdown('stop_columns[' . $rows['blocks'][$r]->id . ']',$coloptions,$rows['blocks'][$r]->column);
         echo form_dropdown('stop_positions[' . $rows['blocks'][$r]->id . ']',$positionoptions,$rows['blocks'][$r]->position);
+        echo form_input('stop_custom_bodies[' . $rows['blocks'][$r]->id . ']', $rows['blocks'][$r]->custom_body);
       }
       else{
         echo form_input("new_stop_ids[$r]",'');
         echo form_input("new_stop_names[$r]",'');
         echo form_dropdown("new_stop_columns[$r]",$coloptions);
         echo form_dropdown("new_stop_positions[$r]",$positionoptions);
+        echo form_input("new_stop_custom_bodies[$r]",'');
       }
       echo '</li>';
     }

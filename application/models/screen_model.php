@@ -25,10 +25,12 @@ class Screen_model extends CI_Model {
   var $stop_names = array();
   var $stop_columns = array();
   var $stop_positions = array();
+  var $stop_custom_bodies = array();
   var $new_stop_ids = array();
   var $new_stop_names = array();
   var $new_stop_columns = array();
   var $new_stop_positions = array();
+  var $new_stop_custom_bodies = array();
 
   public function __construct(){
     parent::__construct();
@@ -49,7 +51,7 @@ class Screen_model extends CI_Model {
     }
 
     //Query the block data
-    $this->db->select('id, stop, custom_name, column, position');
+    $this->db->select('id, stop, custom_name, column, position, custom_body');
     //print $this->id; die;
     $q = $this->db->get_where('blocks',array('screen_id' => $this->id));
 
@@ -63,11 +65,13 @@ class Screen_model extends CI_Model {
         $newnamerow[$row->id] = $row->custom_name;
         $newcolumnrow[$row->id] = $row->column;
         $newpositionrow[$row->id] = $row->position;
+        $newcustombodyrow[$row->id] = $row->custom_body;
 
         $this->stop_ids[] = $newidrow[$row->id];
         $this->stop_names[] = $newnamerow[$row->id];
         $this->stop_columns[] = $newcolumnrow[$row->id];
         $this->stop_positions[] = $newpositionrow[$row->id];
+        $this->stop_custom_bodies[] = $newcustombodyrow[$row->id];
       }
     }
   }
@@ -129,7 +133,7 @@ class Screen_model extends CI_Model {
       }
 
       // Now get the individual block data for this screen.
-      $this->db->select('id, stop, custom_name, column, position');
+      $this->db->select('id, stop, custom_name, column, position, custom_body');
       $this->db->order_by('column', 'asc');
       $this->db->order_by('position', 'asc');
       $q = $this->db->get_where('blocks',array('screen_id' => $id));
@@ -207,7 +211,8 @@ class Screen_model extends CI_Model {
         //'stop'        => $value,
         'custom_name' => $this->stop_names[$key],
         'column'      => $this->stop_columns[$key],
-        'position'    => $this->stop_positions[$key]
+        'position'    => $this->stop_positions[$key],
+        'custom_body' => $this->stop_custom_bodies[$key]
       );
       
       if(strlen(trim($value)) == 0 && strlen(trim($blockdata['custom_name'])) == 0){        
@@ -228,7 +233,8 @@ class Screen_model extends CI_Model {
           'custom_name' => $this->new_stop_names[$key],
           'screen_id'   => $id,
           'column'      => $this->new_stop_columns[$key],
-          'position'    => $this->new_stop_positions[$key]
+          'position'    => $this->new_stop_positions[$key],
+          'custom_body' => $this->new_stop_custom_bodies[$key]
         );
         
         $this->db->insert('blocks', $blockdata);

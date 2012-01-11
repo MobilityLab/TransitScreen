@@ -55,8 +55,11 @@ class Update extends CI_Controller {
       foreach($screendata['blocks'] as $block){
         $stops = $block->stop;
 
+        //print_r($block);die;
+
         $vehicles = array();
         unset($bike);
+        unset($override);
         // For each of the agency-stop pairs for this block...
         foreach($stops as $stop){
           // ... get the arrival predictions for each agency.
@@ -76,6 +79,9 @@ class Update extends CI_Controller {
               break;
             case 'cabi':
               $bike = get_cabi_status($stop['stop_id']);
+              break;
+            case 'custom':
+              $override = $block->custom_body;
               break;
           }
 
@@ -130,6 +136,17 @@ class Update extends CI_Controller {
               'column'    => (int) $block->column,
               'order'     => (int) $block->position,
               'vehicles'  => $stopdata
+            );
+        }
+
+        if(isset($override)){
+          $stopdata = array(
+              'id'          => $block->id,
+              'name'        => $stopname,
+              'type'        => $this->_get_agency_type($stop['agency']),
+              'column'      => (int) $block->column,
+              'order'       => (int) $block->position,
+              'custom_body' => $override
             );
         }
         
@@ -189,7 +206,7 @@ class Update extends CI_Controller {
       case 'metrorail':
         return 'subway';
     }
-    return 'other';
+    return $agency;
 
   }
 

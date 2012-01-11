@@ -121,7 +121,7 @@ body {
 }
 
 #screen-fields ol {
-  width: 490px;
+  width: 615px;
 }
 
 #screen-fields ol .column-headers {
@@ -131,13 +131,17 @@ body {
 
 #screen-fields ol .column-headers span {
   display: inline-block;
-  width: 183px;
+  width: 165px;
   padding-left: 6px;
 }
 
 #screen-fields ol .column-headers .header-column {
   width: 50px;
   padding-left: 0;
+}
+
+#screen-fields ol .column-headers .header-column-ct {
+  width: 51xp;
 }
 
 #screen-fields ol select {
