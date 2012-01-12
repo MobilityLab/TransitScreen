@@ -12,10 +12,10 @@
 
     <script src="<?php echo base_url(); ?><?php echo PUBLICDIR; ?>scripts/screen.js"></script>
 
-    <link rel="stylesheet" href="http://projects.datajamming.com/mobility/html/css/reset.css" type="text/css" media="screen">
-    <link rel="stylesheet" href="http://projects.datajamming.com/mobility/html/css/metro.css" type="text/css" media="screen">
-    <link rel="stylesheet" href="http://projects.datajamming.com/mobility/html/css/cabi.css" type="text/css" media="screen">
-    <link rel="stylesheet" href="http://projects.datajamming.com/mobility/html/css/bus.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="<?php echo base_url(); ?><?php echo PUBLICDIR; ?>css/reset.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="<?php echo base_url(); ?><?php echo PUBLICDIR; ?>css/metro.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="<?php echo base_url(); ?><?php echo PUBLICDIR; ?>css/cabi.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="<?php echo base_url(); ?><?php echo PUBLICDIR; ?>css/bus.css" type="text/css" media="screen">
 
     <style>
       body { background:#000000; margin:20px 20px 0 20px; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}

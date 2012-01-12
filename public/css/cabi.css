@@ -1,0 +1,22 @@
+.cabi_container { margin:1% 0 3% 0; }
+	.cabi_container h2 { color:#aa0a15; font-size:160%; padding-top:2%;}
+	.cabi_container h3 { font-size:150%; padding-top:2%; font-weight:normal;}
+	.cabi_container h4 {  font-size:150%; padding-top:2%;}
+
+#cabi_table td {  vertical-align:bottom;}
+
+.cabi_icon { float:left; background-image: url('../images/cabi_logo_yellow.png'); width: 210px; height: 34px; }
+.cabi_module { }
+
+tr.cabi_header td { border-bottom:1px solid #fff; padding-bottom:1%;   }
+tr.cabi_data td { padding-top:1%;}
+
+.bikes { width:20%; text-align:center; color:#ff0000; }
+.docks { width:20%;  text-align:center; color:#b3b3b3;}
+td.cabi_location { width:60%; color:#fff; font-size:150%; line-height:300%;}
+.cabi_dock_location {}
+
+.cabi_docks { color:#b3b3b3; text-align:center; }
+.cabi_bikes { color:#ff0000; text-align:center;}
+h3.cabi_bikes  { font-size:400%;}
+h3.cabi_docks  { font-size:400%;}

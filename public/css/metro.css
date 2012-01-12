@@ -1,0 +1,67 @@
+/* metro css */
+
+.metro_container {  margin:3% 0 3% 0; }
+/* station block */
+.metro_location { margin-bottom:10px; clear:both; border-bottom:1px solid #fff; padding-bottom:10px;}
+.metro_location h2 {  color:#ffffff; font-size:150%; } /* station name */
+#metro_logo { background:#000; height:25px; width:25px; float:left; margin-right:10px;
+background-image:url("../images/metro_logo_50.png");
+background-size: 25px 25px;
+
+}
+
+
+.metro_line { text-align:center; width:100%; height:100%; border-top-left-radius:10px; border-bottom-left-radius:10px; border-radius:10px; }
+.metro_line h3 {  font-weight:bolder; font-size:150%; text-transform:uppercase; line-height:50px; padding:0; margin:0; }
+
+/* metro Table */
+
+#metro_table { background:#000; width:100%; height:50px;}
+
+.metro_table_line { min-width:80px; border-right:10px;}
+.metro_table_destination { width:100%; border-left:10px solid #000; border-right:10px solid #000; padding-left:10px; padding-right:10px; letter-spacing:1px;	vertical-align:middle;	}
+	
+.metro_table_time { min-width:130px; text-align:center; background:#575757; color:#ffcc33; vertical-align:top;}
+
+td.metro_table_destination h3 { font-size:180%; font-weight:bold; padding:0; margin:0; }
+td.metro_table_time h3 { padding:0; margin:0; font-weight:bold; font-size:250%; letter-spacing:1px; }
+td.metro_table_time h4 {  font-size:70%; text-transform:uppercase; font-weight:lighter; padding:0; margin:0 0 3px 0;  }
+
+#metro_table tr { border-bottom: 10px solid #000; }
+
+.transparent {
+        zoom: 1;
+        filter: alpha(opacity=80);
+        opacity: 0.85;
+}
+
+/* colors */
+.metro_line_orange { background:#efaa49; color:#fff; }
+.metro_line_blue { background:#3f8cda; color:#fff; }
+.metro_line_red { background:#e45340; color:#fff;}
+.metro_line_green { background:#52b05f; color:#fff; }
+.metro_line_yellow { background:#fbeb3e; color:#fff; }
+
+.metro_line_orange_dark { background:#d18212; color:#fff; 
+	background: -webkit-gradient(linear, right top, left top, from(#d18212), to(#000)); /* for webkit browsers */}
+.metro_line_blue_dark { background:#2062a4; color:#fff; 
+	background: -webkit-gradient(linear, right top, left top, from(#2062a4), to(#000)); /* for webkit browsers */}
+.metro_line_red_dark { background:#b52c1a; color:#fff; 
+	background: -webkit-gradient(linear, right top, left top, from(#b52c1a), to(#000)); /* for webkit browsers */}
+.metro_line_green_dark { background:#36773f; color:#fff; 
+	background: -webkit-gradient(linear, right top, left top, from(#36773f), to(#000)); /* for webkit browsers */}
+.metro_line_yellow_dark { background:#dfcd05; color:#fff; 
+	background: -webkit-gradient(linear, right top, left top, from(#fbeb3e), to(#000)); /* for webkit browsers */
+ }
+
+.metro_line_orange h3 { color:#842;}
+.metro_line_blue h3 { color:#04a;}
+.metro_line_red h3 { color:#700;}
+.metro_line_green h3 { color:#284f28;}
+.metro_line_yellow h3 { color:#a80;}
+
+.metro_line_orange h4 { color:#842;}
+.metro_line_blue h4 { color:#04a;}
+.metro_line_red h4 { color:#700;}
+.metro_line_green h4 { color:#284f28;}
+.metro_line_yellow h4 { color:#a80;}

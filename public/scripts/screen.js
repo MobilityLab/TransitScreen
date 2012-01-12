@@ -100,12 +100,9 @@ function generate_blocks() {
       output += '<div id="block-' + blocks[key].id + '" class="' + containerclass + '">';
       output += ' <table id="' + classname_base + '_table">';
       output += '   <tr class="' + classname_base + '_header">';
-      output += '     <td>';
-      output += '       <img src="http://projects.datajamming.com.s3.amazonaws.com/mobility/html/img/cabi_logo.png" class="cabi_icon">';
-      output += '     </td>';
-      output += '     <td>';
-      output += '       <h2>Capital Bikeshare</h2>';
-      output += '     </td>';
+      output += '     <td colspan="2">';
+      output += '       <span class="cabi_icon">&nbsp;</span>';
+      output += '     </td>';     
       output += '     <td class="bikes">';
       output += '       <h4>BIKES</h4>';
       output += '     </td>';
