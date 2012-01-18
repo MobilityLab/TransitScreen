@@ -34,7 +34,12 @@
         vertical-align: middle;
         line-height: 1em;
       }
+      
+      body {
+        zoom: <?php print $zoom; ?>;
+      }
     </style>
 
   </head>
   <body class="total-cols-<?php print $numcols; ?>">
+   

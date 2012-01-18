@@ -20,6 +20,7 @@ class Screen_model extends CI_Model {
   var $Su_cl = '';
   var $name = '';
   var $screen_version = 0;
+  var $zoom = 1;
   var $stop_ids = array();
   var $pair_ids = array();
   var $stop_names = array();
@@ -39,7 +40,7 @@ class Screen_model extends CI_Model {
   public function load_model($id){
     $this->id = $id;
     //Query the screen data
-    $this->db->select('MoTh_op, MoTh_cl, Fr_op, Fr_cl, Sa_op, Sa_cl, Su_op, Su_cl, name');
+    $this->db->select('MoTh_op, MoTh_cl, Fr_op, Fr_cl, Sa_op, Sa_cl, Su_op, Su_cl, name, zoom');
     $q = $this->db->get_where('screens',array('id' => $id));
 
     if ($q->num_rows() > 0) {
@@ -52,7 +53,7 @@ class Screen_model extends CI_Model {
 
     //Query the block data
     $this->db->select('id, stop, custom_name, column, position, custom_body');
-    //print $this->id; die;
+
     $q = $this->db->get_where('blocks',array('screen_id' => $this->id));
 
     //Place the data into the arrays of this object
@@ -61,7 +62,6 @@ class Screen_model extends CI_Model {
         $serialstops = $this->_assemble_stops($row->id);
 
         $newidrow[$row->id] = $row->stop;
-        //$newidrow[$row->id] = $serialstops;
         $newnamerow[$row->id] = $row->custom_name;
         $newcolumnrow[$row->id] = $row->column;
         $newpositionrow[$row->id] = $row->position;
@@ -85,8 +85,7 @@ class Screen_model extends CI_Model {
     if($q->num_rows() > 0) {
       foreach($q->result() as $row){
         $rowarray['agency']   = $row->agency;
-        //$this->db->select('agency, stop_id'
-        //$arrstops = $this->db->get_where('agency_stop', array())
+
         $rowarray['stop_id']  = $row->stop_id;
 
         $output[$row->id] = $rowarray;
@@ -110,7 +109,7 @@ class Screen_model extends CI_Model {
   }
 
   public function get_screen_values($id) {
-    $this->db->select('id, MoTh_op, MoTh_cl, Fr_op, Fr_cl, Sa_op, Sa_cl, Su_op, Su_cl, name, screen_version');
+    $this->db->select('id, MoTh_op, MoTh_cl, Fr_op, Fr_cl, Sa_op, Sa_cl, Su_op, Su_cl, name, screen_version, zoom');
     if($id == 0){
       $q = $this->db->get('screens',1);
     }
@@ -145,12 +144,12 @@ class Screen_model extends CI_Model {
           foreach($stoppairs as $pairing){
             $stopstring .= implode(':',$pairing) . ';';
           }          
-          //$row->stop = substr($stopstring, 0, strlen($stopstring) - 1);
+
           $row->stop = $stoppairs;
           $data['blocks'][] = $row;
         }
       }
-      //print_r($data);die;
+
       return $data;
     }
   }
@@ -169,7 +168,8 @@ class Screen_model extends CI_Model {
       'Su_op'           => $this->Su_op,
       'Su_cl'           => $this->Su_cl,
       'name'            => $this->name,
-      'screen_version'  => $this->screen_version
+      'screen_version'  => $this->screen_version,
+      'zoom'            => $this->zoom
     );
 
     if($id > 0){ // If updating, instead of inserting anew...
@@ -181,8 +181,7 @@ class Screen_model extends CI_Model {
       $this->db->insert('screens',$data);
       $msg = 'created';
     }
-    //print_r($this->pair_ids);
-    // Block updates:
+
     foreach($this->stop_ids as $key => $value){
       unset($blockdata);
       $oldpairs = array();
@@ -205,10 +204,9 @@ class Screen_model extends CI_Model {
       }
 
       $this->_add_stop_pairs($oldpairs,$newpairs,$key);
-      //die;
+
       
       $blockdata = array (
-        //'stop'        => $value,
         'custom_name' => $this->stop_names[$key],
         'column'      => $this->stop_columns[$key],
         'position'    => $this->stop_positions[$key],
@@ -257,9 +255,6 @@ class Screen_model extends CI_Model {
   }
 
   private function _add_stop_pairs($old, $new, $block_id){
-    //print_r($old);
-    //print "<p>$block_id</p>";
-
     foreach($old as $key => $value){
       if($key > 0){
         $this->db->where('id', $key);
@@ -267,9 +262,7 @@ class Screen_model extends CI_Model {
       }
     }
     foreach($new as $pair){
-      //print '<hr>';
       $pair['block_id'] = $block_id;
-      //print_r($pair);
       $this->db->insert('agency_stop',$pair);
     }
   }

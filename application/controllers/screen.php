@@ -21,58 +21,16 @@ class Screen extends CI_Controller {
     $screen->load_model($screenid);
 
     $data['id'] = $screenid;
-
+    
     // Check for sleep mode to determine the view
     if($screen->is_asleep()) {     
       $data['template'] = 'three_col';
     }
     else {
       $data['numcols'] = $screen->get_num_columns();
+      $data['zoom'] = $screen->zoom;
 
-      /*
-      //Collect blocks
-      $blocks = array();
-      $newitem = array();
-      $pairs = array();
-
-      $stopids = $screen->stop_ids;
-      $stopnames = $screen->stop_names;
-      $stopcolumns = $screen->stop_columns;
-      
-      // For each stop block...
-      for($s = 0; $s < count($screen->stop_ids); $s++){
-        unset($newitem);
-
-        $ids = explode(';', $stopids[$s]);
-        unset($pairs);
-        
-        foreach($ids as $idpair){
-          unset($newitem);
-
-          $agencyandid = explode(':', $idpair);
-          $newitem = array(
-            'agency' => $agencyandid[0],
-            'stopid' => $agencyandid[1],            
-          );
-          //print_r($newitem);
-          $pairs[] = $newitem;
-        }
-        
-        if(isset($stopnames[$s])){
-          $blockname = $stopnames[$s];
-        }
-        else {
-          $blockname = '';
-        }
-        $newblock = array(
-          'name'    => $blockname,
-          'column'  => $stopcolumns[$s],
-          'ids'     => $pairs          
-        );
-        $blocks[] = $newblock;
-      }
-      */    
-
+    
     }
     $this->load->view('includes/screen_template', $data);
   }
