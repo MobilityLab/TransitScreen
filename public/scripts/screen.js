@@ -252,7 +252,9 @@ function refresh_data() {
     }
     lastupdate = now;
     //blocks.updated = now; // Set the updated time for the local dataset
-
+    
+    $('#loading-box').remove();
+    
     // For each stop ...
     $.each(json.stops,function(i,stop){
       thisid = stop.id;

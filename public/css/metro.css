@@ -43,16 +43,20 @@ td.metro_table_time h4 {  font-size:70%; text-transform:uppercase; font-weight:l
 .metro_line_yellow { background:#fbeb3e; color:#fff; }
 
 .metro_line_orange_dark { background:#d18212; color:#fff; 
-	background: -webkit-gradient(linear, right top, left top, from(#d18212), to(#000)); /* for webkit browsers */}
+	background: -webkit-gradient(linear, right top, left top, from(#d18212), to(#000)); /* for webkit browsers */
+	background: -moz-linear-gradient(right, #d18212, #000) no-repeat; /* for Mozilla/Firefox */}
 .metro_line_blue_dark { background:#2062a4; color:#fff; 
-	background: -webkit-gradient(linear, right top, left top, from(#2062a4), to(#000)); /* for webkit browsers */}
+	background: -webkit-gradient(linear, right top, left top, from(#2062a4), to(#000)); /* for webkit browsers */
+	background: -moz-linear-gradient(right, #2062a4, #000) no-repeat; /* for Mozilla/Firefox */}
 .metro_line_red_dark { background:#b52c1a; color:#fff; 
-	background: -webkit-gradient(linear, right top, left top, from(#b52c1a), to(#000)); /* for webkit browsers */}
+	background: -webkit-gradient(linear, right top, left top, from(#b52c1a), to(#000)); /* for webkit browsers */
+	background: -moz-linear-gradient(right, #b52c1a, #000) no-repeat; /* for Mozilla/Firefox */}
 .metro_line_green_dark { background:#36773f; color:#fff; 
-	background: -webkit-gradient(linear, right top, left top, from(#36773f), to(#000)); /* for webkit browsers */}
+	background: -webkit-gradient(linear, right top, left top, from(#36773f), to(#000)); /* for webkit browsers */
+	background: -moz-linear-gradient(right, #36773f, #000) no-repeat; /* for Mozilla/Firefox */}
 .metro_line_yellow_dark { background:#dfcd05; color:#fff; 
 	background: -webkit-gradient(linear, right top, left top, from(#fbeb3e), to(#000)); /* for webkit browsers */
- }
+	background: -moz-linear-gradient(right, #fbeb3e, #000) no-repeat; /* for Mozilla/Firefox */}
 
 .metro_line_orange h3 { color:#842;}
 .metro_line_blue h3 { color:#04a;}

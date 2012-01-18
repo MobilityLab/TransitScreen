@@ -21,3 +21,12 @@ body {
   color:#eeeeee;
 }
 
+#loading-box {
+  margin: auto;
+  width: 175px;
+  text-align: center;
+  padding: .5em 1em;
+  font-size: 3em;
+  border-radius: 9px;
+  background-color: #444;
+}
