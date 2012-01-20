@@ -25,7 +25,7 @@ background-size: 25px 25px;
 
 td.metro_table_destination h3 { font-size:180%; font-weight:bold; padding:0; margin:0; }
 td.metro_table_time h3 { padding:0; margin:0; font-weight:bold; font-size:250%; letter-spacing:1px; }
-td.metro_table_time h4 {  font-size:70%; text-transform:uppercase; font-weight:lighter; padding:0; margin:0 0 3px 0;  }
+td.metro_table_time h4 {  font-size:70%; text-transform:uppercase; padding:0; margin:0 0 3px 0;  }
 
 #metro_table tr { border-bottom: 10px solid #000; }
 

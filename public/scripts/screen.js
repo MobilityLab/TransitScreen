@@ -76,6 +76,10 @@ function generate_blocks() {
               if(blocks[key].type == 'bus') {
                 output += '       <span class="bus_min">MINUTE' + pluralize(prediction) + '</span>';
               }
+                 
+              if(blocks[key].type == 'subway') {
+                output += '       <h4>MINUTE' + pluralize(prediction) + '</h4>';
+              }
 
               output += '     </td>';
             }
