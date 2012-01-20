@@ -26,9 +26,7 @@ class Update extends CI_Controller {
     
     //Load variable of screen model type
     $screen->load_model($screen_id);
-
-    //print_r($screen);    die;
-    
+  
     $screen_version = $screen->screen_version;
     print json_encode($screen_version);
 
@@ -136,7 +134,7 @@ class Update extends CI_Controller {
         if(isset($bike)){
           $stopdata = array(
               'id'        => $block->id,
-              'name'      => $stopname,
+              'name'      => clean_destination($stopname),
               'type'      => $this->_get_agency_type($stop['agency']),
               'column'    => (int) $block->column,
               'order'     => (int) $block->position,
@@ -147,7 +145,7 @@ class Update extends CI_Controller {
         else {
           $stopdata = array(
               'id'        => $block->id,
-              'name'      => $stopname,
+              'name'      => clean_destination($stopname),
               'type'      => $this->_get_agency_type($stop['agency']),
               'column'    => (int) $block->column,
               'order'     => (int) $block->position,
@@ -158,7 +156,7 @@ class Update extends CI_Controller {
         if(isset($override)){
           $stopdata = array(
               'id'          => $block->id,
-              'name'        => $stopname,
+              'name'        => clean_destination($stopname),
               'type'        => $this->_get_agency_type($stop['agency']),
               'column'      => (int) $block->column,
               'order'       => (int) $block->position,
@@ -167,10 +165,9 @@ class Update extends CI_Controller {
         }
         
         $update->stops[] = $stopdata;
-        //print_r($update); die;
+
       }     
 
-      //print_r($update); die;
       print json_encode($update);
 
     }

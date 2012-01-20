@@ -44,12 +44,10 @@ function clean_destination($s){
 
   $s = str_replace(', ',' &raquo; ',$s);
 
-  $s = str_replace(' Nw ', ' NW ', $s);
-  $s = str_replace(' Ne ', ' NE ', $s);
-  $s = str_replace(' Sw ', ' SW ', $s);
-  $s = str_replace(' Se ', ' SE ', $s);
-
-  $s = str_replace('Colombia P', 'Columbia P', $s);
+  $s = preg_replace('/Nw(\s|$)/','NW', $s);
+  $s = preg_replace('/Ne(\s|$)/','NE', $s);
+  $s = preg_replace('/Sw(\s|$)/','SW', $s);
+  $s = preg_replace('/Se(\s|$)/','SE', $s);
 
   $s = str_replace('Court House Metro - ','', $s);
   $s = str_replace('Court House Metro to ','', $s);
