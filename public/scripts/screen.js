@@ -248,7 +248,19 @@ function refresh_data() {
   //$.getJSON("http://localhost/scripts/json.js",function(json){
   $.getJSON(queryurl,function(json){
     if(json.screen_version > screenversion) {
-      window.location.reload();
+      
+      
+      $.get(document.URL, function(newpage){
+        console.log(newpage);
+        newpage = newpage.replace('<html>','');
+        newpage = newpage.replace('</html>','');
+        $('html').html(newpage);
+      })        
+      .error(function() { console.log("error"); })
+      
+      //window.location.reload();
+      
+      
     }
     lastupdate = now;
     //blocks.updated = now; // Set the updated time for the local dataset
@@ -343,7 +355,7 @@ $(document).ready(function () {
 });
 
 // This triggers the data update
-$(document).everyTime(55000, function(){
+$(document).everyTime(45000, function(){
   
   var url = queryurl + '?' +  new Date().getTime();
 

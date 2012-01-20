@@ -17,6 +17,22 @@ class Update extends CI_Controller {
 
     $this->load->view('includes/template', $data);
   }
+  
+  public function version($screen_id){
+    $this->load->model('screen_model');
+    $screen = new Screen_model();
+
+    //$screendata = $this->screen_model->get_screen_values($screen_id);
+    
+    //Load variable of screen model type
+    $screen->load_model($screen_id);
+
+    //print_r($screen);    die;
+    
+    $screen_version = $screen->screen_version;
+    print json_encode($screen_version);
+
+  }
 
   public function json($screen_id) {
     $this->load->model('update_model');

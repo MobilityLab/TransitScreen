@@ -40,7 +40,7 @@ class Screen_model extends CI_Model {
   public function load_model($id){
     $this->id = $id;
     //Query the screen data
-    $this->db->select('MoTh_op, MoTh_cl, Fr_op, Fr_cl, Sa_op, Sa_cl, Su_op, Su_cl, name, zoom');
+    $this->db->select('MoTh_op, MoTh_cl, Fr_op, Fr_cl, Sa_op, Sa_cl, Su_op, Su_cl, screen_version, name, zoom');
     $q = $this->db->get_where('screens',array('id' => $id));
 
     if ($q->num_rows() > 0) {
