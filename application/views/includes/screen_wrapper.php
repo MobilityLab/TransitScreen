@@ -47,7 +47,7 @@
           
             // Wait 15 seconds and call another function to check the status
             // of the new iframe
-            setTimeout('switch_frames(' + versionval + ');',15000);
+            setTimeout('switch_frames("' + versionval + '");',15000);
           }         
           
         })

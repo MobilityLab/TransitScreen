@@ -22,13 +22,23 @@ class Update extends CI_Controller {
     $this->load->model('screen_model');
     $screen = new Screen_model();
 
-    //$screendata = $this->screen_model->get_screen_values($screen_id);
-    
-    //Load variable of screen model type
-    $screen->load_model($screen_id);
+    $screendata = $this->screen_model->get_screen_values($screen_id);
   
-    $screen_version = $screen->screen_version;
-    print json_encode($screen_version);
+    unset($screendata['settings'][0]->id);
+    unset($screendata['settings'][0]->MoTh_op);
+    unset($screendata['settings'][0]->MoTh_cl);
+    unset($screendata['settings'][0]->Fr_op);
+    unset($screendata['settings'][0]->Fr_cl);
+    unset($screendata['settings'][0]->Sa_op);
+    unset($screendata['settings'][0]->Sa_cl);
+    unset($screendata['settings'][0]->Su_op);
+    unset($screendata['settings'][0]->Su_cl);
+    unset($screendata['settings'][0]->name);
+    unset($screendata['settings'][0]->last_checkin);
+    
+    $hash = md5(print_r($screendata,true));
+
+    print json_encode($hash);
 
   }
 
@@ -164,7 +174,7 @@ class Update extends CI_Controller {
         
         $update->stops[] = $stopdata;
 
-      }     
+      }
 
       print json_encode($update);
 

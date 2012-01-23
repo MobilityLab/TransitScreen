@@ -250,9 +250,7 @@ class Screen_model extends CI_Model {
           $this->db->insert('agency_stop',$newstop);
         }
       }
-    }    
-        
-    //redirect("screen_admin/index/$msg");
+    }        
   }
 
   private function _add_stop_pairs($old, $new, $block_id){
