@@ -58,6 +58,8 @@ class Screen_admin extends CI_Controller {
 
     $updatevals->save_screen_values($id);
 
+    redirect("screen_admin/edit/$id");
+
   } 
   
 }

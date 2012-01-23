@@ -252,7 +252,7 @@ class Screen_model extends CI_Model {
       }
     }    
         
-    redirect("screen_admin/index/$msg");   
+    //redirect("screen_admin/index/$msg");
   }
 
   private function _add_stop_pairs($old, $new, $block_id){
