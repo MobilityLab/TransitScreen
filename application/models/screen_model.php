@@ -179,6 +179,7 @@ class Screen_model extends CI_Model {
     }
     else {
       $this->db->insert('screens',$data);
+      $id = $this->db->insert_id();
       $msg = 'created';
     }
 
