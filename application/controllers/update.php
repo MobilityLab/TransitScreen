@@ -45,12 +45,10 @@ class Update extends CI_Controller {
     $screen->load_model($screen_id);
 
     $update->screen_name = $screendata['settings'][0]->name;
-
-    //print_r($screendata);die;
-
     $update->screen_version = $screendata['settings'][0]->screen_version;
 
-
+    // Update the last_checkin value for this screen
+    $this->_update_timestamp($screen_id);
 
     if($screen->is_asleep()) {
       $update->sleep = true;
@@ -221,6 +219,14 @@ class Update extends CI_Controller {
     }
     return $agency;
 
+  }
+
+  private function _update_timestamp($id){    
+    $this->db->where('id', $id);
+    //Postgres format must be ISO 8601, e.g. 2012-01-16 14:43:55
+    $this->db->update('screens', array(
+        'last_checkin'  =>  date('c')
+    ));
   }
 
 

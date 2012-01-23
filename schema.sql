@@ -139,7 +139,8 @@ CREATE TABLE screens (
     "Su_cl" time without time zone,
     name character(250),
     screen_version integer,
-    zoom numeric DEFAULT 1
+    zoom numeric DEFAULT 1,
+    last_checkin timestamp without time zone
 );
 
 

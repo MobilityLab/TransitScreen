@@ -84,6 +84,10 @@ body {
   width: 200px;
 }
 
+#screen-list .last-checkin {
+  font-size: .7em;
+}
+
 #screen-fields .edit-field label {
   display: block;
   float: left;
