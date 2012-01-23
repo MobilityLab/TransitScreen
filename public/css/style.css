@@ -117,11 +117,12 @@ body {
   color: #333;
   font-size: .8em;
   width: 325px;
-  float: right;
+  float: left;
 }
 
 #screen-fields ol {
-  width: 615px;
+  float: left;
+  width: 625px;
 }
 
 #screen-fields ol .column-headers {
