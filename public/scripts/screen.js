@@ -3,6 +3,7 @@ var lastupdate = 0;     // To be updated by json
 var blankout = 100;       // After losing a connection, the screen
                         // will autodecrement each prediction for
                         // this number of minutes.
+var buslimit = 99;       // bus limit per block
 var firstload = true;
 var queryurl = '../../update/json/' + screen_id;
 
@@ -14,7 +15,9 @@ var blocks = new Array();    // Array of stop and arrival data
 function generate_blocks() {
   // loop through local data and create templates.
   for(var key in blocks){
-    var output = '';    
+    var output = '';
+    var vcount = 0;
+    
 
     classname_base = translate_class_name(blocks[key].type);
     if(classname_base == 'bus'){
@@ -35,6 +38,9 @@ function generate_blocks() {
       output += ' <table id="' + classname_base + '_table">';
 
       $.each(blocks[key].vehicles, function(v,vehicle){
+
+        var vout = '';
+        
 
         if(vehicle.predictions.length > 0){
           var subsequent = '';
@@ -58,30 +64,30 @@ function generate_blocks() {
             logoclass = '';
           }
 
-          output += '   <tr class="' + classname_base + '_table_module" id="block-' + blocks[key].id + '-vehicle-' + v + '">';
-          output += '     <td class="' + classname_base + '_table_line">';           
-          output += '       <div class="' + classname_base + '_line ' + classname_base + '_line_' + class_suffix + logoclass + '">';
-          output += '         <h3>' + vehicle.route + '</h3>';
-          output += '       </div>';
-          output += '     </td>';
-          output += '     <td class="' + classname_base + '_table_destination ' + classname_base + '_line_' + class_suffix + railsuffix + '">';
-          output += split_destination(vehicle.agency, vehicle.destination);
-          output += '     </td>';
+          vout += '   <tr class="' + classname_base + '_table_module" id="block-' + blocks[key].id + '-vehicle-' + v + '">';
+          vout += '     <td class="' + classname_base + '_table_line">';
+          vout += '       <div class="' + classname_base + '_line ' + classname_base + '_line_' + class_suffix + logoclass + '">';
+          vout += '         <h3>' + vehicle.route + '</h3>';
+          vout += '       </div>';
+          vout += '     </td>';
+          vout += '     <td class="' + classname_base + '_table_destination ' + classname_base + '_line_' + class_suffix + railsuffix + '">';
+          vout += split_destination(vehicle.agency, vehicle.destination);
+          vout += '     </td>';
           $.each(vehicle.predictions, function(p, prediction) {
             // For the first prediction
             if(p == 0) {
-              output += '     <td class="' + classname_base + '_table_time">';
-              output += '       <h3>' + prediction + '</h3>';
+              vout += '     <td class="' + classname_base + '_table_time">';
+              vout += '       <h3>' + prediction + '</h3>';
 
               if(blocks[key].type == 'bus') {
-                output += '       <span class="bus_min">MINUTE' + pluralize(prediction) + '</span>';
+                vout += '       <span class="bus_min">MINUTE' + pluralize(prediction) + '</span>';
               }
                  
               if(blocks[key].type == 'subway') {
-                output += '       <h4>MINUTE' + pluralize(prediction) + '</h4>';
+                vout += '       <h4>MINUTE' + pluralize(prediction) + '</h4>';
               }
 
-              output += '     </td>';
+              vout += '     </td>';
             }
             
             if(p > 0 && p < 3) {
@@ -90,13 +96,25 @@ function generate_blocks() {
 
           });
           
-          output += '     <td class="' + classname_base + '_table_upcoming">' + subsequent + '</td>';
-          output += '   </tr>';
+          vout += '     <td class="' + classname_base + '_table_upcoming">' + subsequent + '</td>';
+          vout += '   </tr>';
+          
+          //console.log(blocks[key].name + ': ' + vcount + ' / ' + buslimit);
+
+          if(blocks[key].type == 'bus' && (vcount >= buslimit)){
+            vout = '';
+          }
+
+          output += vout;
+
+          vcount++;
+
         }
       });
       output += '   </table>';
-      //output += ' </div>';
       output += '</div>';
+
+      
     }
 
     // For CaBi, output data this way
