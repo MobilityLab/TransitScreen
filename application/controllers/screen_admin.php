@@ -26,8 +26,7 @@ class Screen_admin extends CI_Controller {
     $is_logged_in = $this->session->userdata('is_logged_in');
 
     if(!isset($is_logged_in) || $is_logged_in !== true ){
-      echo 'You do not have permission to view this page.';
-      die();
+      redirect('');      
     }
   }
 
