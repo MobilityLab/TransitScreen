@@ -53,12 +53,25 @@ class Screen_admin extends CI_Controller {
     unset($postvars->submit);
     
     foreach($postvars as $key => $value){
-      $updatevals->$key = $value;      
+      //print substr($key, strlen($key)-3) . '<br/>';
+      if(substr($key, strlen($key)-3) == '_op' || substr($key, strlen($key)-3) == '_cl'){
+        if(strlen($value) > 0){
+          $updatevals->$key = $value;
+        }
+      }
+      else {
+        $updatevals->$key = $value;
+      }
     }
 
     $updatevals->save_screen_values($id);
 
-    redirect("screen_admin/edit/$id");
+    if($id > 0){
+      redirect("screen_admin/edit/$id");
+    }
+    else {
+      redirect('screen_admin');
+    }
 
   } 
   

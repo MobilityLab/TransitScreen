@@ -10,14 +10,14 @@
 class Screen_model extends CI_Model {
   
   var $id = '';
-  var $MoTh_op = '';
-  var $MoTh_cl = '';
-  var $Fr_op = '';
-  var $Fr_cl = '';
-  var $Sa_op = '';
-  var $Sa_cl = '';
-  var $Su_op = '';
-  var $Su_cl = '';
+  var $MoTh_op = '00:00:00';
+  var $MoTh_cl = '24:00:00';
+  var $Fr_op = '00:00:00';
+  var $Fr_cl = '24:00:00';
+  var $Sa_op = '00:00:00';
+  var $Sa_cl = '24:00:00';
+  var $Su_op = '00:00:00';
+  var $Su_cl = '24:00:00';
   var $name = '';
   var $screen_version = 0;
   var $zoom = 1;
@@ -172,6 +172,7 @@ class Screen_model extends CI_Model {
       'zoom'            => $this->zoom
     );
 
+    
     if($id > 0){ // If updating, instead of inserting anew...
       $this->db->where('id', $id);
       $this->db->update('screens', $data);

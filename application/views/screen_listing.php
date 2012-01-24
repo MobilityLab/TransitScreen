@@ -13,7 +13,13 @@
         <span class="screen-name"><?php print $r->name; ?></span>
         <?php echo anchor('screen_admin/edit/' . $r->id, 'edit', array('class' => 'edit-link')); ?>
         <?php echo anchor('screen/index/' . $r->id, 'view', array('class' => 'view-link')); ?>
-        <div class="last-checkin"><span>Last checkin:</span> <?php print date('D, M j, Y, g:i:s a',strtotime($r->last_checkin)); ?></div>
+        <div class="last-checkin"><span>Last checkin:</span> 
+          <?php if($r->last_checkin > 0): ?>
+            <?php print date('D, M j, Y, g:i:s a',strtotime($r->last_checkin)); ?>
+          <?php else: ?>
+            Never
+          <?php endif; ?>
+        </div>
       </div>
     <?php endforeach; ?>
   </div>
