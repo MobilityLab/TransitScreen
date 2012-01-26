@@ -49,18 +49,13 @@
     echo '<ol>';
     echo '<div class="column-headers"><span>Stop IDs</span><span>Custom stop name (opt.)</span><span class="header-column">Column</span><span class="header-column">Position</span><span class="header-column-ct">Custom text</span></div>';
     for($r = 0; $r < 9; $r++) {
-      
-      $coloptions = array(
-                  1 => '1',
-                  2 => '2',
-                  3 => '3'
-                );
-      $positionoptions = array(
-                  1 => '1',
-                  2 => '2',
-                  3 => '3',
-                  4 => '4'
-                );
+
+      for($c = 1; $c < 4; $c++){
+        $coloptions[$c] = $c;
+      }
+      for($p = 1; $p < 10; $p++){
+        $positionoptions[$p] = $p;
+      }
 
       $serialstring = '';
       $pairids = array();
