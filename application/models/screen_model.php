@@ -76,18 +76,24 @@ class Screen_model extends CI_Model {
     }
   }
 
-  private function _assemble_stops($parentid){
+  private function _assemble_stops($parentid, $separate_excl = false){
     $output = array();
 
-    $this->db->select('id, agency,stop_id');
+    $this->db->select('id, agency,stop_id, exclusions');
     $q = $this->db->get_where('agency_stop', array('block_id' => $parentid));
 
     if($q->num_rows() > 0) {
       foreach($q->result() as $row){
         $rowarray['agency']   = $row->agency;
-
         $rowarray['stop_id']  = $row->stop_id;
-
+        if(strlen($row->exclusions) > 0){
+          if($separate_excl){
+            $rowarray['exclusions'] = strtoupper($row->exclusions);
+          }
+          else {
+            $rowarray['stop_id'] .= '-' . $row->exclusions;
+          }
+        }
         $output[$row->id] = $rowarray;
       }
     }
@@ -108,7 +114,7 @@ class Screen_model extends CI_Model {
     }
   }
 
-  public function get_screen_values($id) {
+  public function get_screen_values($id, $separate_excl = false) {
     $this->db->select('id, MoTh_op, MoTh_cl, Fr_op, Fr_cl, Sa_op, Sa_cl, Su_op, Su_cl, name, screen_version, zoom');
     if($id == 0){
       $q = $this->db->get('screens',1);
@@ -140,7 +146,7 @@ class Screen_model extends CI_Model {
       if($q->num_rows() > 0){
         foreach($q->result() as $row){
           $stopstring = '';
-          $stoppairs = $this->_assemble_stops($row->id);
+          $stoppairs = $this->_assemble_stops($row->id, $separate_excl);
           foreach($stoppairs as $pairing){
             $stopstring .= implode(':',$pairing) . ';';
           }          
@@ -193,15 +199,23 @@ class Screen_model extends CI_Model {
       $stop_pairs = explode(';',$value);
       foreach($stop_pairs as $skey => $svalue){
         $as = explode(':',$svalue);
+        $se = explode('-',$as[1]);
+
         if(isset($k[$skey])){
           $oldpairs[$k[$skey]] = array(
-              'agency'  => $as[0],
-              'stop_id' => $as[1]);
+              'agency'    => $as[0],
+              'stop_id'   => $se[0],
+              'exclusions'  => $se[1]
+              //'stop_id' => $as[1]
+          );
         }
         else {
           $newpairs[] = array(
-              'agency'  => $as[0],
-              'stop_id' => $as[1]);
+              'agency'    => $as[0],
+              'stop_id'   => $se[0],
+              'exclusions' => $se[1]
+              //'stop_id' => $as[1]
+          );
         }
       }
 

@@ -52,7 +52,6 @@ class Screen_admin extends CI_Controller {
     unset($postvars->submit);
     
     foreach($postvars as $key => $value){
-      //print substr($key, strlen($key)-3) . '<br/>';
       if(substr($key, strlen($key)-3) == '_op' || substr($key, strlen($key)-3) == '_cl'){
         if(strlen($value) > 0){
           $updatevals->$key = $value;

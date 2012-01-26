@@ -49,7 +49,8 @@ class Update extends CI_Controller {
     $this->load->model('screen_model');
     $screen = new Screen_model();
 
-    $screendata = $this->screen_model->get_screen_values($screen_id);
+    $screendata = $this->screen_model->get_screen_values($screen_id, true);
+    //print_r($screendata); die;
     
     //Load variable of screen model type
     $screen->load_model($screen_id);
@@ -77,21 +78,31 @@ class Update extends CI_Controller {
       foreach($screendata['blocks'] as $block){
         $stops = $block->stop;
 
-        //print_r($block);die;
-
         $vehicles = array();
         unset($bike);
-        unset($override);
+        unset($override);        
+
         // For each of the agency-stop pairs for this block...
         foreach($stops as $stop){
           // ... get the arrival predictions for each agency.
-          //
+          $exclusions = array();
+          if(isset($stop['exclusions'])){
+            $exclusions = explode(',', $stop['exclusions']);
+          }          
 
           switch($this->_get_agency_type($stop['agency'])){
             case 'bus':
+              $newset = array();
               $set = get_bus_predictions($stop['stop_id'],$stop['agency'],false);              
               if(isset($set[0])){
-                $vehicles[] = $set;
+                //print_r($set); print_r($exclusions);die;
+                foreach($set as $b){
+                  if(!in_array(strtoupper($b['route']),$exclusions)){
+                    $newset[] = $b;
+                  }
+                }
+                //print_r($set); print_r($newset);die;
+                $vehicles[] = $newset;
               }
               
               break;
@@ -106,7 +117,6 @@ class Update extends CI_Controller {
               $override = $block->custom_body;
               break;
           }
-
         }
         
         // Combine the different agency predictions for this stop
