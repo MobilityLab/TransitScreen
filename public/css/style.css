@@ -46,7 +46,7 @@ body {
 }
 
 #screen-list .listing {
-  width: 335px;
+  width: 350px;
 }
 
 #screen-list .listing .list-item {
@@ -126,7 +126,7 @@ body {
 
 #screen-fields ol {
   float: left;
-  width: 625px;
+  width: 775px;
 }
 
 #screen-fields ol .column-headers {
