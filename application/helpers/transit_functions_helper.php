@@ -237,10 +237,30 @@ function get_nextbus_predictions($stop_id,$agency_tag){
     $agency = 'Circulator';
   }
 
-  $busxml = simplexml_load_file("http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=$agency_tag&stopId=$stop_id");
-  //print_r($busxml);die;
+  $busxml = simplexml_load_file("http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=$agency_tag&stopId=$stop_id");  
 
-  $routename = $busxml->predictions->attributes()->routeTitle;
+  //foreach predictions
+  foreach($busxml->predictions as $pred){  
+    $stopname = (string) $pred->attributes()->stopTitle;
+    $routename = (string) $pred->attributes()->routeTitle;
+    //foreach direction
+    foreach($pred->direction as $dir){
+      $destination = (string) $dir->attributes()->title;
+      //foreach prediction
+      foreach($dir->prediction as $p){        
+        unset($newitem);
+        $newitem['stop_name'] = $stopname;
+        $newitem['agency'] = $agency;
+        $newitem['route'] = $routename;
+        $newitem['destination'] = $routename . ' (' . $destination . ')';
+        $newitem['prediction'] = (int) $p['minutes'];
+        $out[] = $newitem;
+      }
+    }
+  }
+
+
+  /*$routename = $busxml->predictions->attributes()->routeTitle;
   if($routename == 'Dupont-Rosslyn') {
     $routename = 'Circulator';
   }
@@ -250,7 +270,8 @@ function get_nextbus_predictions($stop_id,$agency_tag){
     $destination = "Dupont via Georgetown";
   }
   else {    
-    $destination = (string) $busxml->predictions->direction[0]->attributes()->title;
+    //print (string) $busxml->predictions->direction[0]->attributes()->title;die;
+    //$destination = (string) $busxml->predictions->direction[0]->attributes()->title;
   }
 
 
@@ -262,9 +283,8 @@ function get_nextbus_predictions($stop_id,$agency_tag){
     $newitem['destination'] = $destination;
     $newitem['prediction'] = (int) $prediction['minutes'];
     $out[] = $newitem;
-  }
-
-  //$out = array_splice($out, 0, 99);
+  }*/
+  
   //print_r($out); die;
   return $out;
 }
