@@ -1,4 +1,6 @@
-<html>
+<?php
+  $appendix = '?' . time();
+?><html>
   <head>
     <title>Transit arrival screen</title>
     <link rel="stylesheet" href="<?php echo base_url(); ?><?php echo PUBLICDIR; ?>css/screen.css" type="text/css" media="screen">
@@ -9,7 +11,7 @@
 
     <script type="text/javascript" src="<?php echo base_url(); ?><?php echo PUBLICDIR; ?>scripts/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?><?php echo PUBLICDIR; ?>scripts/jquery.timers-1.2.js"></script>
-    <script type="text/javascript" src="<?php echo base_url(); ?><?php echo PUBLICDIR; ?>scripts/screen.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?><?php echo PUBLICDIR; ?>scripts/screen.js<?php print $appendix; ?>"></script>
 
     <link rel="stylesheet" href="<?php echo base_url(); ?><?php echo PUBLICDIR; ?>css/reset.css" type="text/css" media="screen">
     <link rel="stylesheet" href="<?php echo base_url(); ?><?php echo PUBLICDIR; ?>css/metro.css" type="text/css" media="screen">

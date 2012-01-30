@@ -119,6 +119,25 @@ function generate_blocks() {
 
     // For CaBi, output data this way
     if(blocks[key].type == 'cabi'){
+
+      var bikelist = '';
+      
+      // For each station, assemble the table row
+      $.each(blocks[key].stations, function(c, cabistation) {
+        bikelist += '   <tr class="cabi_data">';
+        bikelist += '     <td class="pie"><img src="https://chart.googleapis.com/chart?cht=p&chs=100x80&chd=t:' + cabistation.bikes + ',' + cabistation.docks + '&chco=ff0000|b3b3b3&chf=bg,s,000000&chp=1.58" /></td>';
+        bikelist += '     <td class="cabi_location">';
+        bikelist += '       <span class="cabi_dock_location">' + cabistation.stop_name + '</span>';
+        bikelist += '     </td>';
+        bikelist += '     <td>';
+        bikelist += '       <h3 class="cabi_bikes">' + cabistation.bikes + '</h3>';
+        bikelist += '     </td>';
+        bikelist += '     <td>';
+        bikelist += '       <h3 class="cabi_docks">' + cabistation.docks + '</h3>';
+        bikelist += '     </td>';
+        bikelist += '   </tr>';
+      });
+
       output += '<div id="block-' + blocks[key].id + '" class="' + containerclass + '">';
       output += ' <table id="' + classname_base + '_table">';
       output += '   <tr class="' + classname_base + '_header">';
@@ -132,18 +151,7 @@ function generate_blocks() {
       output += '       <h4>DOCKS</h4>';
       output += '     </td>';
       output += '   </tr>';
-      output += '   <tr class="cabi_data">';
-      output += '     <td class="pie"><img src="https://chart.googleapis.com/chart?cht=p&chs=100x80&chd=t:' + blocks[key].bikes + ',' + blocks[key].docks + '&chco=ff0000|b3b3b3&chf=bg,s,000000&chp=1.58" /></td>';
-      output += '     <td class="cabi_location">';
-      output += '       <span class="cabi_dock_location">' + blocks[key].name + '</span>';
-      output += '     </td>';
-      output += '     <td>';
-      output += '       <h3 class="cabi_bikes">' + blocks[key].bikes + '</h3>';
-      output += '     </td>';
-      output += '     <td>';
-      output += '       <h3 class="cabi_docks">' + blocks[key].docks + '</h3>';
-      output += '     </td>';
-      output += '   </tr>';
+      output += bikelist;
       output += ' </table>';
       output += '</div>';      
     }

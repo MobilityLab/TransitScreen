@@ -80,6 +80,8 @@ class Update extends CI_Controller {
 
         $vehicles = array();
         unset($bike);
+        $bikes = array();
+
         unset($override);        
 
         // For each of the agency-stop pairs for this block...
@@ -107,11 +109,11 @@ class Update extends CI_Controller {
               
               break;
             case 'subway':              
-              $vehicles[] = get_rail_predictions($stop['stop_id'], array (1 => '', 2 => ''), false);
-              
+              $vehicles[] = get_rail_predictions($stop['stop_id'], array (1 => '', 2 => ''), false);              
               break;
             case 'cabi':
-              $bike = get_cabi_status($stop['stop_id']);
+              $bikes[] = get_cabi_status($stop['stop_id']);
+              //$bike = get_cabi_status($stop['stop_id']);
               break;
             case 'custom':
               $override = $block->custom_body;
@@ -155,15 +157,16 @@ class Update extends CI_Controller {
           $stopname = $block->custom_name;
         }
         
-        if(isset($bike)){
+        if(isset($bikes) && count($bikes) > 0){
           $stopdata = array(
               'id'        => $block->id,
               'name'      => clean_destination($stopname),
               'type'      => $this->_get_agency_type($stop['agency']),
               'column'    => (int) $block->column,
               'order'     => (int) $block->position,
-              'bikes'     => $bike['bikes'],
-              'docks'     => $bike['docks']
+              'stations'  => $bikes
+              //'bikes'     => $bike['bikes'],
+              //'docks'     => $bike['docks']
             );
         }
         else {
@@ -187,6 +190,8 @@ class Update extends CI_Controller {
               'custom_body' => $override
             );
         }
+
+        //print_r($stopdata);die;
         
         $update->stops[] = $stopdata;
 
