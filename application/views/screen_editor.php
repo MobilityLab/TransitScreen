@@ -57,10 +57,14 @@
         $positionoptions[$p] = $p;
       }
 
+      $limitoptions[0] = 'none';
+      for($l = 1; $l < 20; $l++){
+        $limitoptions[$l] = $l;
+      }
+
       $serialstring = '';
-      $pairids = array();
+      $pairids = array();      
       
-      //print_r($rows['blocks'][$r]->stop);
       if(isset($rows['blocks'][$r]->stop)){
         foreach($rows['blocks'][$r]->stop as $key => $value){
           $serialstring .= $value['agency'] . ':' . $value['stop_id'] . ';';
@@ -81,6 +85,7 @@
         echo form_dropdown('stop_columns[' . $rows['blocks'][$r]->id . ']',$coloptions,$rows['blocks'][$r]->column);
         echo form_dropdown('stop_positions[' . $rows['blocks'][$r]->id . ']',$positionoptions,$rows['blocks'][$r]->position);
         echo form_input('stop_custom_bodies[' . $rows['blocks'][$r]->id . ']', $rows['blocks'][$r]->custom_body);
+        echo form_dropdown('stop_limits[' . $rows['blocks'][$r]->id . ']',$limitoptions,$rows['blocks'][$r]->limit);
       }
       else{
         echo form_input("new_stop_ids[$r]",'');
@@ -88,6 +93,7 @@
         echo form_dropdown("new_stop_columns[$r]",$coloptions);
         echo form_dropdown("new_stop_positions[$r]",$positionoptions);
         echo form_input("new_stop_custom_bodies[$r]",'');
+        echo form_dropdown("new_stop_limits[$r]",$limitoptions);
       }
       echo '</li>';
     }

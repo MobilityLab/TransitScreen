@@ -133,6 +133,12 @@ class Update extends CI_Controller {
             $stopdata = $vehicles[0];
           }
 
+          // If there is a limit to the number of arrival lines to list
+          // at any bus stop, remove the extra vehicles from the array
+          if((isset($block->limit) && isset($stopdata)) && (count($stopdata) > $block->limit) && $block->limit > 0){
+            array_splice($stopdata,$block->limit);
+          }
+
           if(isset($vehicles[0][0]['stop_name'])){
             $stopname = $vehicles[0][0]['stop_name'];
           }
