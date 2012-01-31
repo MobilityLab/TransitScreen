@@ -1,5 +1,16 @@
 <?php
 
+
+  /**
+   * Function: get_field_alias
+   *
+   * @param string $input
+   * @return string
+   *
+   * This function replaces the machine formated database field names with
+   * human-readable names.
+   *
+   */
   function get_field_alias($input){
 
     $input = str_replace('MoTh_', 'Monday - Thursday ', $input);
@@ -15,6 +26,16 @@
    
   }
 
+  /**
+   * Function: get_verbose_status
+   *
+   * @param string $input
+   * @return string
+   *
+   * This returns a more descriptive status message to the user.  It may not be
+   * in use anymore.
+   *
+   */
   function get_verbose_status($input) {
     switch($input){
       case 'success':

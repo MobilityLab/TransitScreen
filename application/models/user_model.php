@@ -1,25 +1,29 @@
 <?php
 
 /**
- * Users
+ * Class: User_model
  *
- * This is the user account model
+ * This simple model represents a logged in user to the system.  Since Phase 1
+ * development only accounts for an administrative user and not for the public
+ * we the class's functions are limited to some basic function.
  *
  */
 
 class User_model extends CI_Model {
 
+  // Class properties.  Account type is for future use.
   public $id = '';
   public $username = '';
   public $password = '';
   public $account_type = '';
 
+  /*
+   * Generic construtor
+   */
   public function __construct(){
     parent::__construct();
 
-    //$this->table = 'users';
-
-    // codeigniter profiler //
+    // This is a Code Igniter feature.
     $this->output->enable_profiler(TRUE);
 
     // error reporting //
@@ -28,6 +32,17 @@ class User_model extends CI_Model {
 
   }
 
+
+  /**
+   * Function: create_user
+   *
+   * @param array $data - an array of data used to create a user
+   * @return NULL
+   *
+   * This is a function not in use right now, but can be used later when adding
+   * functionality to create new users.
+   *
+   */
   public function create_user($data){
 
     $data->password = md5($data->password);
@@ -38,10 +53,16 @@ class User_model extends CI_Model {
     return NULL;
   }
 
-  public function update_user($data){
-
-  }
-  
+  /**
+   * Function: get_user_by_id
+   *
+   * @param int $user_id - the user id of the user whose settings yo want to load
+   * @return array or null
+   *
+   * This function returns user information from the db based on the id it has
+   * been passed.  This may not be in actual use yet.
+   *
+   */
   public function get_user_by_id($user_id) {    
     $this->db->where('id',$user_id);    
     $query = $this->db->get($this->table);
@@ -53,7 +74,17 @@ class User_model extends CI_Model {
       return NULL;
     }    
   }
-  
+
+  /**
+   * Function: get_user_by_username
+   *
+   * @param string $username
+   * @return array or null
+   *
+   * This function returns user data based on the user name instead of the
+   * user id.  This function may not be in use at this time.
+   *
+   */
   public function get_user_by_username($username){
     $this->db->where('email',$username);
     $query = $this->db->get($this->table);
@@ -66,6 +97,18 @@ class User_model extends CI_Model {
     }
   }
 
+  /**
+   * Function: validate
+   *
+   * @return User_model
+   *
+   * This function validates the user credentials in the class properties
+   * against what's stored in the db.  If the user namd and password match a
+   * record, then the user object is returned with the user name and id as
+   * object properties.  This funciton is necessary to log user, including
+   * the administrator, in properly.
+   *
+   */
   public function validate() {
     $this->db->where('email', $this->input->post('username'));
     $this->db->where('password', md5($this->input->post('password')));

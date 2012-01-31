@@ -1,5 +1,5 @@
 <?php
-  $appendix = '?' . time();
+  $appendix = '?' . time(); // Appending this time integer forces the browser to refresh the file instead of using a cached version
 ?><html>
   <head>
     <title>Transit arrival screen</title>

@@ -1,8 +1,11 @@
 <?php
-  
-  $callurl = base_url() . 'index.php/screen/inner/'   . $id;
-  $pollurl = base_url() . 'index.php/update/version/' . $id;
 
+  // This page is the "super page" that loads the IFRAME that contains the actual
+  // screen information.
+
+  $callurl = base_url() . 'index.php/screen/inner/'   . $id;  // The url to call for prediction updates
+  $pollurl = base_url() . 'index.php/update/version/' . $id;  // The url to call to check whether the screen needs
+                                                              // needs to be refreshed.
 ?><html>
   <head>
     <title>Transit Screen</title>

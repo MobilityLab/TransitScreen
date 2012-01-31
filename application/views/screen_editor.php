@@ -1,5 +1,8 @@
 <?php
-  //print_r($rows['settings']); die
+
+  // This is the screen editor view.  It is called from the edit method of the
+  // screen controller.  That is where the $row array is created.
+
   if(isset($rows['settings'][0]->id)){
     $id = $rows['settings'][0]->id;
     unset($rows['settings'][0]->id);
@@ -24,9 +27,11 @@
   <h3>Screen Settings</h3>
 
   <?php
-
+    // Open the form and set the action attribute
     echo form_open("screen_admin/save/$id");
 
+    // Create a field set for the screen properties and print them out with
+    // labels
     echo form_fieldset('Operating settings');
 
     foreach($rows['settings'][0] as $key => $value){
@@ -46,10 +51,13 @@
         'dc-circulator' =>  'Circulator',
         'art'           =>  'ART'
     );
+
+    // Print out block section with space for 9 blocks
     echo '<ol>';
-    echo '<div class="column-headers"><span>Stop IDs</span><span>Custom stop name (opt.)</span><span class="header-column">Column</span><span class="header-column">Position</span><span class="header-column-ct">Custom text</span></div>';
+    echo '<div class="column-headers"><span>Stop IDs</span><span>Custom stop name (opt.)</span><span class="header-column">Column</span><span class="header-column">Position</span><span class="header-column-ct">Custom text</span><span>Limit</span></div>';
     for($r = 0; $r < 9; $r++) {
 
+      // Set the options for the columns, positions, and item limits
       for($c = 1; $c < 4; $c++){
         $coloptions[$c] = $c;
       }
@@ -64,7 +72,8 @@
 
       $serialstring = '';
       $pairids = array();      
-      
+
+      // Write the existing agency-stop pairs to the block boxes
       if(isset($rows['blocks'][$r]->stop)){
         foreach($rows['blocks'][$r]->stop as $key => $value){
           $serialstring .= $value['agency'] . ':' . $value['stop_id'] . ';';
@@ -76,6 +85,8 @@
         $serialstring = substr($serialstring, 0, strlen($serialstring) - 1);
       }
 
+      // Write out the lines for each of the blocks.  Existing blocks are written
+      // out first and empty blocks are written out second (in the else{})
       echo '<li class="stop-row">';
       if(isset($rows['blocks'][$r])){        
         //echo form_input('stop_ids[' . $rows['blocks'][$r]->id . ']', $rows['blocks'][$r]->stop);
@@ -98,7 +109,7 @@
       echo '</li>';
     }
     echo '</ol>';
-
+    // Print out instructions
     echo '  <div class="instructions">Format: [agency id]:[stop id], e.g. <em>metrobus:6000123</em>.
               <p>If several agencies serve a single stop, separate each agency-stop combination with semicolons.</p>
               <p>Agency codes:</p>

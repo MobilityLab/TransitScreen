@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Function: clean_time
+ *
+ * @param mixed $m
+ * @return string
+ *
+ * This function takes in a train arrival time and converts it into something
+ * easier to read.
+ */
 function clean_time($m){
   switch (trim($m)){
     case '':
@@ -15,6 +24,16 @@ function clean_time($m){
       return $m . ' <span>mins</span>';
   }
 }
+
+/**
+ * Function: clean_station
+ *
+ * @param string $s
+ * @return string
+ *
+ * Gets a line destination abbreviation and returns a more human-readable version.
+ *
+ */
 function clean_station($s){
   switch($s) {
     case 'NewCrltn':
@@ -32,6 +51,17 @@ function clean_station($s){
   }
 }
 
+/**
+ * Function: clean_destination
+ * @param string $s
+ * @return string
+ *
+ * Receives an API-generated destination and fixes it to make it fit better
+ * or read better on the screen.  For instance, the WMATA API prints out 'NW'
+ * incorrectly as 'Nw'.  This function fixes that.  This is also a good place
+ * to add other API corrections as you find them.
+ *
+ */
 function clean_destination($s){
   $s = str_replace('North to ','',$s);
   $s = str_replace('South to ','',$s);
@@ -57,6 +87,7 @@ function clean_destination($s){
   return $s;
 }
 
+
 function render_bus($bus){
   return '<div class="item agency-' . $bus['agency'] . '">
             <div class="route">' . $bus['route'] . '</div>
@@ -73,27 +104,41 @@ function render_trains($train) {
      </div>';
 }
 
+/**
+ * Function: get_rail_predictions
+ * @param int $station_id - the WMATA station id
+ * @param array $group_names - optional platform side names
+ * @param bool $render - whether this function should rending or just return data
+ * @return mixed - the returned array (data) or string (rendered)
+ *
+ * This function gets the rail predictions from the WMATA API, formats the data
+ * nicely and returns the data.
+ *
+ */
 function get_rail_predictions($station_id, array $group_names, $render = true){
   $trains = array();
+
 
   for($gr = 1; $gr <= count($group_names); $gr++) {
     $traingroup[$gr] = '';
   }
 
+  // The WMATAKEY constant is set in /application/config/constants.php
   $key = WMATAKEY;
+  // Load the train prediction XML from the API
   $railxml = simplexml_load_file("http://api.wmata.com/StationPrediction.svc/GetPrediction/$station_id?api_key=$key");
   $predictions = $railxml->Trains->AIMPredictionTrainInfo;
 
+  // For each prediction, but the data into an array to return
   for($t = 0; $t < count($predictions); $t++){
-    //$newitem['group'] = (int) $predictions[$t]->Group;
+  
     $newitem['stop_name'] = (string) $predictions[$t]->LocationName;
     $newitem['agency'] = 'metrorail';
-    $newitem['route'] = (string) $predictions[$t]->Line;
-    //$newitem['cars'] = (int) $predictions[$t]->Car;
+    $newitem['route'] = (string) $predictions[$t]->Line;  
     $newitem['destination'] = (string) $predictions[$t]->DestinationName;
-
     $newitem['predictions'] = array();
 
+    // Prediction 'ARR' will become 0 and 'BRD' predictions will be omitted
     switch ((string) $predictions[$t]->Min) {
       case 'ARR':
         $newitem['predictions'][] = 0;
@@ -110,19 +155,16 @@ function get_rail_predictions($station_id, array $group_names, $render = true){
     }
   }
 
-  
-
+  // Do an array_multisort to sort by prediction time, then color, then destination
   foreach($trains as $key => $row){
-    //$g[$key] = $row['group'];
-    //$l[$key] = $row['line'];
     $r[$key] = $row['route'];
-    //$c[$key] = $row['cars'];
     $d[$key] = $row['destination'];
     $p[$key] = $row['predictions'];
   }
-
   array_multisort($p, SORT_ASC, $r, SORT_ASC, $d, SORT_ASC, $trains);
 
+  // The new screen system does not render the data here, so this is a vestige.
+  // Just return the data.
   if($render) {
     foreach($trains as $train){
       $traingroup[$train['group']] .= render_trains($train, $group_names);
@@ -134,10 +176,22 @@ function get_rail_predictions($station_id, array $group_names, $render = true){
   }
 }
 
+/**
+ * Function: assemble_stop
+ * @param array $stops - an array of the agency-stop pairs for one block
+ * @param int $max - listing maximum
+ * @return array - the buses sorted by prediction, regardless of agency
+ *
+ * This function takes an array of bus predictions for a single stop and sorts
+ * the predictions by the prediction time, regardless of agency.  The newly sorted
+ * array is returned.
+ *
+ */
 function assemble_stop(array $stops, $max = 4){
   $buses = array();
   $out = '';
 
+  // For each agency-stop pair in this block, get the predictions
   foreach($stops as $key => $value){
     $busgroups[] = get_bus_predictions($value, $key, false);
   }
@@ -145,13 +199,15 @@ function assemble_stop(array $stops, $max = 4){
     $buses = array_merge($buses,$busgroups[$g]);
   }
 
+  // We have the bus prediction data grouped by agency, but it needs to be sorted
+  // by prediction time, regarless of agency.  This loop and array_multisort will
+  // handle that.
   foreach($buses as $key => $row){
     $r[$key] = $row['route'];
     $d[$key] = $row['destination'];
     $p[$key] = $row['prediction'];
     $a[$key] = $row['agency'];
     $s[$key] = $row['stop_name'];
-
   }
   array_multisort($p, SORT_ASC, $r, SORT_DESC, $d, SORT_ASC, $buses);
 
@@ -163,12 +219,25 @@ function assemble_stop(array $stops, $max = 4){
   return $out;
 }
 
+/**
+ * Function: combine_agencies
+ *
+ * @param array $busgroups
+ * @param int $max
+ * @return array
+ *
+ * Take the groups of bus predictions from different agencies (but for one stop),
+ * merge them together and sort them by prediction regardless of agency.  Return
+ * the newly sorted array.
+ *
+ */
 function combine_agencies(array $busgroups, $max = 99) {
   $combined = array();
   for($g = 0; $g < count($busgroups); $g++) {
     $combined = array_merge($combined,$busgroups[$g]);
   }
 
+  // Sort by prediction, then route, then destination
   foreach($combined as $key => $row){
     $r[$key] = $row['route'];
     $d[$key] = $row['destination'];
@@ -178,28 +247,31 @@ function combine_agencies(array $busgroups, $max = 99) {
   }
   array_multisort($p, SORT_ASC, $r, SORT_DESC, $d, SORT_ASC, $combined);
 
-  //$limit = min(count($combined),$max);
-
-  //for($b = 0; $b < $limit; $b++){
-  //  $out .= render_bus($buses[$b]);
-  //}
-
   return $combined;
 }
 
+/**
+ * Function: get_bus_prediction
+ *
+ * @param mixed $stop_id - the stop id
+ * @param string $agency - the agency id
+ * @param bool $render - whether to render the data or just return the data
+ * @return mixed - array of data (unrendered) or a string (rendered)
+ *
+ *
+ */
 function get_bus_predictions($stop_id,$agency,$render = true) {
   $out = '';
 
+  // Call the different API function based on the agency name.
   switch ($agency) {
     case 'wmata':
     case 'metrobus':
-      $buses = get_metrobus_predictions($stop_id);
-      //print_r($buses);
+      $buses = get_metrobus_predictions($stop_id);      
       break;
     case 'dc-circulator':
     case 'circulator':      
-      $buses = get_nextbus_predictions($stop_id, 'dc-circulator');
-      //print_r($buses); die;
+      $buses = get_nextbus_predictions($stop_id, 'dc-circulator');      
       break;
     case 'art':
       $buses = get_connexionz_predictions($stop_id, 'art');
@@ -209,8 +281,19 @@ function get_bus_predictions($stop_id,$agency,$render = true) {
   return $buses;  
 }
 
+/**
+ * Function: get_metrobus_predictions
+ *
+ * @param int $stop_id - the stop id
+ * @return array - the Metrobus prediction data for this stop
+ *
+ * This function gets the Metrobus arrival predictions for a given Metrbus stop
+ * and returns the predictions in an array.
+ *
+ */
 function get_metrobus_predictions($stop_id){
   $out = '';
+  // Call the API
   if(!($busxml = simplexml_load_file("http://api.wmata.com/NextBusService.svc/Predictions?StopID=$stop_id&api_key=" . WMATAKEY))){
     return false;
   }
@@ -219,6 +302,7 @@ function get_metrobus_predictions($stop_id){
 
   $limit = min(count($predictions), 4);
 
+  // Add the predictions into an array
   for($b = 0; $b < $limit; $b++){
     $newitem['stop_name'] = $stop_name;
     $newitem['agency'] = 'Metrobus';
@@ -227,16 +311,29 @@ function get_metrobus_predictions($stop_id){
     $newitem['prediction'] = (int) $predictions[$b]->Minutes;
     $out[] = $newitem;
   }
-  //print_r($out);
+
+  // Return the array of predictions.
   return $out;
 }
 
+/**
+ * Function get_nextbus_predictions
+ *
+ * @param int $stop_id
+ * @param string $agency_tag
+ * @return array
+ *
+ * Get the NextBus predictions for this bus stop and return the data in an array.
+ * This is what we will use for the DC Circulator.
+ *
+ */
 function get_nextbus_predictions($stop_id,$agency_tag){
 
   if($agency_tag == 'dc-circulator'){
     $agency = 'Circulator';
   }
 
+  // Load the XML from the API
   $busxml = simplexml_load_file("http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=$agency_tag&stopId=$stop_id");  
 
   //foreach predictions
@@ -259,42 +356,28 @@ function get_nextbus_predictions($stop_id,$agency_tag){
     }
   }
 
-
-  /*$routename = $busxml->predictions->attributes()->routeTitle;
-  if($routename == 'Dupont-Rosslyn') {
-    $routename = 'Circulator';
-  }
-  $stop_name = (string) $busxml->predictions->attributes()->stopTitle;
-
-  if($stop_id == '0136' && $agency_tag == 'dc-circulator'){
-    $destination = "Dupont via Georgetown";
-  }
-  else {    
-    //print (string) $busxml->predictions->direction[0]->attributes()->title;die;
-    //$destination = (string) $busxml->predictions->direction[0]->attributes()->title;
-  }
-
-
-  $predictions = $busxml->predictions->direction[0];
-  foreach($predictions->prediction as $prediction) {
-    $newitem['stop_name'] = $stop_name;
-    $newitem['agency'] = $agency;
-    $newitem['route'] = $routename;
-    $newitem['destination'] = $destination;
-    $newitem['prediction'] = (int) $prediction['minutes'];
-    $out[] = $newitem;
-  }*/
-  
-  //print_r($out); die;
   return $out;
 }
 
+/**
+ * Function: get_connexionz_predictions
+ *
+ * @param mixed $stop_id - the stop id
+ * @param string $agency - the agency name
+ * @return array - an array of bus predictions from Connexionz
+ *
+ * This function collects the bus arrival predictions from ART's Connexionz API
+ * and returns the data in an array.
+ *
+ */
 function get_connexionz_predictions($stop_id,$agency) {
   if($agency == 'art'){
+    // Call the XML from the API
     $busxml = simplexml_load_file("http://realtime.commuterpage.com/RTT/Public/Utility/File.aspx?ContentType=SQLXML&Name=RoutePositionET.xml&PlatformTag=$stop_id");
     $agency_name = 'ART';
   }
 
+  // Put the predictions into an array
   $predictions = $busxml->Platform;
   $stop_name = (string) $busxml->Platform['Name'];
   foreach($predictions->Route as $route){ //For each route
@@ -304,11 +387,12 @@ function get_connexionz_predictions($stop_id,$agency) {
       $newitem['route'] = (string) $route['RouteNo'];
       $newitem['destination'] = (string) $route['Name'];
       $newitem['prediction'] = (int) $trip['ETA'];
-      $out[] = $newitem;
-      //print $route['RouteNo'] . ' - ' . $route['Name'] . ': ' . $trip['ETA'] . '<br/>';
+      $out[] = $newitem;      
     }
   }
 
+  // Use array_multisort to sort the predictions by time, then route, then
+  // destination, then agency
   foreach($out as $key => $row){
     $a[$key] = $row['agency'];
     $r[$key] = $row['route'];
@@ -317,14 +401,24 @@ function get_connexionz_predictions($stop_id,$agency) {
   }
   array_multisort($p, SORT_ASC, $r, SORT_DESC, $d, SORT_ASC, $a, SORT_ASC, $out);
 
-  //print_r($out);
-
   return $out;
 }
 
+/**
+ * Function: get_cabi_status
+ *
+ * @param int $station_id - the id of the CaBi station
+ * @return array - an array of the station data
+ *
+ * Given a CaBi station id, get the station data and return an array with the
+ * station status, e.g. number of bikes, number of docks, and the station name.
+ * 
+ */
 function get_cabi_status($station_id){
+  // Load the XML file for the entire system.
   $cabixml = simplexml_load_file("http://www.capitalbikeshare.com/stations/bikeStations.xml");
 
+  // Find the station with the parameter id and get the data for it.
   $stations = $cabixml->station;
   foreach($stations as $station){
     if((int) $station->id == $station_id) {
@@ -335,6 +429,7 @@ function get_cabi_status($station_id){
     }
   }
 
+  // Return an array with the cabi station data.
   return $cabi;
 }
 
