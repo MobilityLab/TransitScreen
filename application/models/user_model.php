@@ -119,7 +119,8 @@ class User_model extends CI_Model {
       
       $user = new User_model();
       $user->id = $row->id;
-      $user->username = $row->username;
+      //$user->username = $row->username;
+      $user->username = $row->email; // current db schema uses email
 
       return $user;
     }
