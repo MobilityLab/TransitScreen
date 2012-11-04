@@ -275,8 +275,8 @@ function refresh_data() {
   // query the server for the new data
   //$.getJSON("http://localhost/index.php/update/json/" + screen_id,function(json){
   //$.getJSON("../../update/json/" + screen_id,function(json){
-  //$.getJSON("http://localhost/scripts/json.js",function(json){
-  $.getJSON(queryurl,function(json){
+  $.getJSON("http://localhost/scripts/json.js",function(json){
+  //$.getJSON(queryurl,function(json){
     if(json.screen_version > screenversion) {
       
       
@@ -317,6 +317,7 @@ function refresh_data() {
   // add/update a "last updated" property to each object
 }
 
+/*
 function time_tracker(id, lastcheck, iteration) {
   // each minute, automatically decrement each prediction
   // in the local data.  
@@ -368,9 +369,7 @@ function time_tracker(id, lastcheck, iteration) {
     });
   }  
 }
-
-
-
+*/
 
 // Do this as the initial load
 $(document).ready(function () {

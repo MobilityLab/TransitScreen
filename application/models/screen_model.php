@@ -10,7 +10,7 @@
 
 class Screen_model extends CI_Model {
 
-  //  These variables correspond to the fiels in screens table
+  //  These variables correspond to the fields in screens table
   var $id = '';
   var $MoTh_op = '00:00:00';
   var $MoTh_cl = '24:00:00';
@@ -23,7 +23,10 @@ class Screen_model extends CI_Model {
   var $name = '';
   var $screen_version = 0;
   var $zoom = 1;
-
+  var $lat = 0;
+  var $lon = 0;
+  var $wmata_key = '';
+  
   // These correspond to the related records in the blocks and agency_stop tables
   var $stop_ids = array();
   var $pair_ids = array();
@@ -61,7 +64,7 @@ class Screen_model extends CI_Model {
   public function load_model($id){
     $this->id = $id;
     //Query the screen data
-    $this->db->select('MoTh_op, MoTh_cl, Fr_op, Fr_cl, Sa_op, Sa_cl, Su_op, Su_cl, screen_version, name, zoom');
+    $this->db->select('MoTh_op, MoTh_cl, Fr_op, Fr_cl, Sa_op, Sa_cl, Su_op, Su_cl, screen_version, name, zoom, lat, lon, wmata_key');
     $q = $this->db->get_where('screens',array('id' => $id));
 
     if ($q->num_rows() > 0) {
@@ -117,7 +120,7 @@ class Screen_model extends CI_Model {
     $output = array();
 
     // Get all the agency_stop pairs affiliated with the specified block
-    $this->db->select('id, agency,stop_id, exclusions');
+    $this->db->select('id,agency,stop_id,exclusions');
     $q = $this->db->get_where('agency_stop', array('block_id' => $parentid));
 
     // Assemble all these responses into an array
@@ -180,7 +183,7 @@ class Screen_model extends CI_Model {
    */
   public function get_screen_values($id, $separate_excl = false) {
     // Get all the screen's configuration values
-    $this->db->select('id, MoTh_op, MoTh_cl, Fr_op, Fr_cl, Sa_op, Sa_cl, Su_op, Su_cl, name, screen_version, zoom');
+    $this->db->select('id, MoTh_op, MoTh_cl, Fr_op, Fr_cl, Sa_op, Sa_cl, Su_op, Su_cl, name, screen_version, zoom, lat, lon, wmata_key');
     if($id == 0){
       $q = $this->db->get('screens',1);
     }
@@ -242,7 +245,7 @@ class Screen_model extends CI_Model {
   public function save_screen_values($id) {
 
     $msg = '';
-    //Load the model setting into an array that will be writtedn to the db
+    //Load the model setting into an array that will be written to the db
     $data = array(
       'MoTh_op'         => $this->MoTh_op,
       'MoTh_cl'         => $this->MoTh_cl,
@@ -254,9 +257,11 @@ class Screen_model extends CI_Model {
       'Su_cl'           => $this->Su_cl,
       'name'            => $this->name,
       'screen_version'  => $this->screen_version,
-      'zoom'            => $this->zoom
+      'zoom'            => $this->zoom,
+      'lat'             => $this->lat,
+      'lon'             => $this->lon,
+      'wmata_key'       => $this->wmata_key
     );
-
     
     if($id > 0){ // If updating, instead of inserting anew...
       $this->db->where('id', $id);
@@ -286,7 +291,7 @@ class Screen_model extends CI_Model {
       $stop_pairs = explode(';',$value);
 
       // For each stop pair, see if there is an exclusion value appended with
-      // a hypen.  Write the data to an array of new blocks if this is new or
+      // a hyphen.  Write the data to an array of new blocks if this is new or
       // write to an array of existing blocks.  These arrays are just theoretical
       // and will be written to the db a little later down.
       foreach($stop_pairs as $skey => $svalue){

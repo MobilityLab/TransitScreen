@@ -1,6 +1,7 @@
 <?php
   $appendix = '?' . time(); // Appending this time integer forces the browser to refresh the file instead of using a cached version
-?><html>
+?><!DOCTYPE html>
+  <html>
   <head>
     <title>Transit arrival screen</title>
     <link rel="stylesheet" href="<?php echo base_url(); ?><?php echo PUBLICDIR; ?>css/screen.css" type="text/css" media="screen">

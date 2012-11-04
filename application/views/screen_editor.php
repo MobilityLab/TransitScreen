@@ -1,7 +1,7 @@
 <?php
 
   // This is the screen editor view.  It is called from the edit method of the
-  // screen controller.  That is where the $row array is created.
+  // screen controller.  That is where the $rows array is created.
 
   if(isset($rows['settings'][0]->id)){
     $id = $rows['settings'][0]->id;
@@ -33,16 +33,15 @@
     // Create a field set for the screen properties and print them out with
     // labels
     echo form_fieldset('Operating settings');
-
     foreach($rows['settings'][0] as $key => $value){
       echo '<div class="edit-field">';
       echo form_label(get_field_alias($key), $key);
       echo form_input($key, trim($value));
       echo '</div>';
     }
-
     echo form_fieldset_close();
     
+    // Create a field set for the stops
     echo form_fieldset('Stops');
     
     $agencies = array(
@@ -109,40 +108,15 @@
       echo '</li>';
     }
     echo '</ol>';
-    // Print out instructions
-    echo '  <div class="instructions">Format: [agency id]:[stop id], e.g. <em>metrobus:6000123</em>.
-              <p>If several agencies serve a single stop, separate each agency-stop combination with semicolons.</p>
-              <p>Agency codes:</p>
-              <ul>
-                <li>Metrorail: metrorail</li>
-                <li>Metrobus: metrobus</li>
-                <li>ART: art</li>
-                <li>Circulator: dc-circulator</li>
-                <li>Capital Bikeshare: cabi</li>
-                <li>Custom text block: custom</li>
-              </ul>             
-
-              <p><strong>WMATA</strong>: Use the form below to help find nearby Metrobus stop IDs based on latitude and longitude coordinates.</p>';
- 
-    echo form_input(array(
-        'id'    =>  'lat',
-        'value' =>  '38.898732'
-    ));
-    echo form_input(array(
-        'id'    =>  'lon',
-        'value' => '-77.036605'
-    ));
-    echo form_button('finder', 'Find', 'onClick="find_stops()"');
-
-    echo '    <p>View the <a href="http://api.wmata.com/Rail.svc/Stations?api_key=' . WMATAKEY . '" target="_blank">rail station codes</a>.</p>
-              <p><strong>ART</strong>: Download and unzip the <a href="http://www.arlingtontransit.com/pages/rider-tools/tools-for-developers/" target="_blank">ART GTFS file</a>.  Open the stops.txt file, which is really a CSV file, in Excel or something similar.  Find the <em>stop_id</em> for the stop you want.</p>
-              <p><strong>DC Circulator</strong>: Go to <a href="http://circulator.dc.gov/" target="_blank">circulator.dc.gov</a>, select the line and stop you want.  The stop id will appear as the number at the end of the URL in your browser address bar.</p>
-              <p><strong>CaBi</strong>: Go to <a href="http://cabitracker.com" target="_blank">cabitracker.com</a>, and click the station you want. Click the <em>more data</em> link.  The station id will appear in the URL address bar of your browser.</p>';
-
+    
     echo form_fieldset_close();
   
     echo form_submit('submit', 'Save');
     echo form_close();
+  ?>
+  
+  <?php
+    $this->load->view('includes/screen_admin_instructions');
   ?>
   
 </div>

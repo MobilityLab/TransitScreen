@@ -1,5 +1,19 @@
 <?php
 
+// debug helper
+function d(){
+echo '
+
+';
+    foreach(func_get_args() as $v){
+       error_log(var_export($v,true))
+       ;
+    }
+    echo '
+
+';
+}
+
 /**
  * Function: clean_time
  *
@@ -107,6 +121,7 @@ function render_trains($train) {
 /**
  * Function: get_rail_predictions
  * @param int $station_id - the WMATA station id
+ * @param string $api_key - the WMATA API key
  * @param array $group_names - optional platform side names
  * @param bool $render - whether this function should rending or just return data
  * @return mixed - the returned array (data) or string (rendered)
@@ -115,7 +130,7 @@ function render_trains($train) {
  * nicely and returns the data.
  *
  */
-function get_rail_predictions($station_id, array $group_names, $render = true){
+function get_rail_predictions($station_id, $api_key, array $group_names, $render = true){
   $trains = array();
 
 
@@ -123,10 +138,8 @@ function get_rail_predictions($station_id, array $group_names, $render = true){
     $traingroup[$gr] = '';
   }
 
-  // The WMATAKEY constant is set in /application/config/constants.php
-  $key = WMATAKEY;
   // Load the train prediction XML from the API
-  $railxml = simplexml_load_file("http://api.wmata.com/StationPrediction.svc/GetPrediction/$station_id?api_key=$key");
+  $railxml = simplexml_load_file("http://api.wmata.com/StationPrediction.svc/GetPrediction/$station_id?api_key=$api_key");
   $predictions = $railxml->Trains->AIMPredictionTrainInfo;
 
   // For each prediction, but the data into an array to return
@@ -176,24 +189,24 @@ function get_rail_predictions($station_id, array $group_names, $render = true){
   }
 }
 
-/**
- * Function: assemble_stop
+/*
+ * Function: assemble_stop_array
  * @param array $stops - an array of the agency-stop pairs for one block
+ * @param string $api_key - the API key for the agency (in this case WMATA)
  * @param int $max - listing maximum
  * @return array - the buses sorted by prediction, regardless of agency
  *
  * This function takes an array of bus predictions for a single stop and sorts
  * the predictions by the prediction time, regardless of agency.  The newly sorted
  * array is returned.
- *
- */
-function assemble_stop(array $stops, $max = 4){
+ 
+function assemble_stop_array(array $stops, $api_key, $max = 4){
   $buses = array();
   $out = '';
 
   // For each agency-stop pair in this block, get the predictions
   foreach($stops as $key => $value){
-    $busgroups[] = get_bus_predictions($value, $key, false);
+    $busgroups[] = get_bus_predictions($value, $api_key, $key, false);
   }
   for($g = 0; $g < count($busgroups); $g++) {
     $buses = array_merge($buses,$busgroups[$g]);
@@ -218,6 +231,7 @@ function assemble_stop(array $stops, $max = 4){
   }
   return $out;
 }
+*/
 
 /**
  * Function: combine_agencies
@@ -251,23 +265,24 @@ function combine_agencies(array $busgroups, $max = 99) {
 }
 
 /**
- * Function: get_bus_prediction
+ * Function: get_bus_predictions
  *
  * @param mixed $stop_id - the stop id
+ * @param string $api_key - the API key for the agency
  * @param string $agency - the agency id
  * @param bool $render - whether to render the data or just return the data
  * @return mixed - array of data (unrendered) or a string (rendered)
  *
  *
  */
-function get_bus_predictions($stop_id,$agency,$render = true) {
+function get_bus_predictions($stop_id,$api_key,$agency,$render = true) {
   $out = '';
 
   // Call the different API function based on the agency name.
   switch ($agency) {
     case 'wmata':
     case 'metrobus':
-      $buses = get_metrobus_predictions($stop_id);      
+      $buses = get_metrobus_predictions($stop_id, $api_key);      
       break;
     case 'dc-circulator':
     case 'circulator':      
@@ -285,16 +300,17 @@ function get_bus_predictions($stop_id,$agency,$render = true) {
  * Function: get_metrobus_predictions
  *
  * @param int $stop_id - the stop id
+ * @param string $api_key - the WMATA API key
  * @return array - the Metrobus prediction data for this stop
  *
  * This function gets the Metrobus arrival predictions for a given Metrbus stop
  * and returns the predictions in an array.
  *
  */
-function get_metrobus_predictions($stop_id){
+function get_metrobus_predictions($stop_id,$api_key){
   $out = '';
   // Call the API
-  if(!($busxml = simplexml_load_file("http://api.wmata.com/NextBusService.svc/Predictions?StopID=$stop_id&api_key=" . WMATAKEY))){
+  if(!($busxml = simplexml_load_file("http://api.wmata.com/NextBusService.svc/Predictions?StopID=$stop_id&api_key=" . $api_key))){
     return false;
   }
   $stop_name = (string) $busxml->StopName;

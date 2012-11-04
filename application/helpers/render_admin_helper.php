@@ -32,15 +32,14 @@
    * @param string $input
    * @return string
    *
-   * This returns a more descriptive status message to the user.  It may not be
-   * in use anymore.
+   * This returns a more descriptive status message to the user.
    *
    */
   function get_verbose_status($input) {
     switch($input){
       case 'success':
          return 'Changes saved.';
-      case 'success':
+      case 'success': // huh? MSC
          return 'Screen created.';
       default:
          return '';

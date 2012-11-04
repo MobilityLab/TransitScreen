@@ -106,7 +106,7 @@ class Screen_admin extends CI_Controller {
     // Load the screen model
     $this->load->model('screen_model');
 
-    // Create a placehold screen that will be filled with variables and then saved.
+    // Create a placeholder screen that will be filled with variables and then saved.
     $updatevals = new Screen_model();
     $updatevals->id = $id;
 

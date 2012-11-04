@@ -1,1 +1,0 @@
-<div>This is a bus stop!</div>

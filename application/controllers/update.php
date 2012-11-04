@@ -60,7 +60,7 @@ class Update extends CI_Controller {
 
     $screendata = $this->screen_model->get_screen_values($screen_id);
 
-    // Remove the fololwing variables from the hash: the id, the sleep and wake
+    // Remove the following variables from the hash: the id, the sleep and wake
     // times, the name, and the last checkin time.  This information does not
     // relate to the actual screen layout and should be excluded.  Note that the
     // sleep and wake status is determined by the server and not the screen
@@ -111,7 +111,7 @@ class Update extends CI_Controller {
 
     // Fill this variable with the screen values.
     $screendata = $this->screen_model->get_screen_values($screen_id, true);
-        
+
     //Load variable of screen model type
     $screen->load_model($screen_id);
 
@@ -119,6 +119,8 @@ class Update extends CI_Controller {
     // so set a few of its static properties based on the screendata variable.
     $update->screen_name = $screendata['settings'][0]->name;
     $update->screen_version = $screendata['settings'][0]->screen_version;
+
+    $wmata_key = $screendata['settings'][0]->wmata_key;
 
     // Update the last_checkin value for this screen.  This allows us to ensure
     // that our screens are regularly calling for updates.
@@ -172,7 +174,7 @@ class Update extends CI_Controller {
 
               // Get the bus prediction data back.  This get_bus_predictions
               // function covers ART, WMATA, and DC Circulator
-              $set = get_bus_predictions($stop['stop_id'],$stop['agency'],false);              
+              $set = get_bus_predictions($stop['stop_id'],$wmata_key,$stop['agency'],false);              
               if(isset($set[0])){
                 // Loop through the results.  If the bus line is not in the
                 // exclusions array, add it to a new set.  We will abandon the
@@ -190,7 +192,7 @@ class Update extends CI_Controller {
               // $stop['stop_id').  The second parameter to over ride platform-
               // side labelling.  The third parameter tells the function just
               // to return unrendered data.
-              $vehicles[] = get_rail_predictions($stop['stop_id'], array (1 => '', 2 => ''), false);
+              $vehicles[] = get_rail_predictions($stop['stop_id'],$wmata_key, array (1 => '', 2 => ''), false);
               break;
             case 'cabi':
               // For each bike station, get the status.  Notice that the data
@@ -286,7 +288,7 @@ class Update extends CI_Controller {
       }
       // Print out the entire $update variable encoded as JSON
       print json_encode($update);
-
+      //d('MSC json:',$update);
     }
 
     

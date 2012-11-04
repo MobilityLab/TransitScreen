@@ -4,7 +4,7 @@
  *
  * This is the login class and is used exclusively for logging in admin users.
  * If you wish to handle more sophisticated tasks like password recovery or
- * assinging different users to different access priviledges, add the code in
+ * assigning different users to different access privileges, add the code in
  * here.
  *
  */
