@@ -1,23 +1,19 @@
 var screenversion = 0;  // To be written by php
 var lastupdate = 0;     // To be updated by json
-var blankout = 100;       // After losing a connection, the screen
+//var blankout = 100;   // After losing a connection, the screen
                         // will autodecrement each prediction for
                         // this number of minutes.
-var buslimit = 99;       // bus limit per block
+var buslimit = 99;      // Bus limit per block
 var firstload = true;
-var queryurl = '../../update/json/' + screen_id;
-
-//http://localhost/index.php/update/json/1
+var queryurl = '../../update/json/' + screen_id; //e.g. http://localhost/index.php/update/json/1
 
 var blocks = new Array();    // Array of stop and arrival data
-
 
 function generate_blocks() {
   // loop through local data and create templates.
   for(var key in blocks){
     var output = '';
     var vcount = 0;
-    
 
     classname_base = translate_class_name(blocks[key].type);
     if(classname_base == 'bus'){
@@ -40,7 +36,6 @@ function generate_blocks() {
       $.each(blocks[key].vehicles, function(v,vehicle){
 
         var vout = '';
-        
 
         if(vehicle.predictions.length > 0){
           var subsequent = '';
@@ -112,9 +107,7 @@ function generate_blocks() {
         }
       });
       output += '   </table>';
-      output += '</div>';
-
-      
+      output += '</div>'; 
     }
 
     // For CaBi, output data this way
@@ -161,7 +154,6 @@ function generate_blocks() {
       output +=   blocks[key].custom_body;
       output += '</div>';   
     }
-
     
     if('vehicles' in blocks[key] || blocks[key].type == 'cabi' || blocks[key].type == 'custom'){
       if($('#block-' + blocks[key].id).length > 0){
@@ -176,9 +168,7 @@ function generate_blocks() {
       $('#block-' + blocks[key].id).empty();
     }
   }
-
-  reorder_blocks();
-  
+  reorder_blocks(); 
 }
 
 function reorder_blocks() {
@@ -275,10 +265,9 @@ function refresh_data() {
   // query the server for the new data
   //$.getJSON("http://localhost/index.php/update/json/" + screen_id,function(json){
   //$.getJSON("../../update/json/" + screen_id,function(json){
-  $.getJSON("http://localhost/scripts/json.js",function(json){
-  //$.getJSON(queryurl,function(json){
+  //$.getJSON("http://localhost/scripts/json.js",function(json){
+  $.getJSON(queryurl,function(json){
     if(json.screen_version > screenversion) {
-      
       
       $.get(document.URL, function(newpage){
         console.log(newpage);
@@ -287,10 +276,7 @@ function refresh_data() {
         $('html').html(newpage);
       })        
       .error(function() { console.log("error"); })
-      
-      //window.location.reload();
-      
-      
+      //window.location.reload(); 
     }
     lastupdate = now;
     //blocks.updated = now; // Set the updated time for the local dataset
