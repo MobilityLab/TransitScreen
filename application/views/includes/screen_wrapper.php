@@ -22,8 +22,8 @@
         get_update();
       });
       
-      // Poll the server to find the latest version number;
-      $(document).everyTime(25000, function(){
+      // Poll the server to find the latest version number
+      $(document).everyTime(60000, function(){
         get_update();      
       });
       
@@ -48,9 +48,8 @@
             
             frameclass = 'hidden';    
           
-            // Wait 15 seconds and call another function to check the status
-            // of the new iframe
-            setTimeout('switch_frames("' + versionval + '");',15000);
+            // Wait 20 seconds and call another function to check the status of the new iframe
+            setTimeout('switch_frames("' + versionval + '");',20000);
           }         
           
         })
