@@ -58,6 +58,7 @@ class Screen extends CI_Controller {
     // a $data variable and set the numcols to the number of columns and the
     // zoom level to the custom zoom level.
     if($screen->is_asleep()) {     
+      $data['numcols'] = 3;
       $data['template'] = 'three_col';
     }
     else {

@@ -288,7 +288,6 @@ class Update extends CI_Controller {
       }
       // Print out the entire $update variable encoded as JSON
       print json_encode($update);
-      //d('MSC json:',$update);
     }
 
     

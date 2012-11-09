@@ -1,34 +1,27 @@
 <?php
-
   // This is the screen editor view.  It is called from the edit method of the
-  // screen controller.  That is where the $rows array is created.
+  // screen_admin controller.  That is where the $rows array is created.
 
-  if(isset($rows['settings'][0]->id)){
+  if($rows['settings'][0]->id != 0){
     $id = $rows['settings'][0]->id;
-    unset($rows['settings'][0]->id);
-  }
-  else {
-    $id = 0;
-    unset($rows['settings'][0]['id']);
-  }
-  
-
-  if(isset($rows['settings'][0]->name)){
     $title = $rows['settings'][0]->name;
+    $create = false;
   }
   else {
+    $id = rand(0,999999);
+    $rows['settings'][0]->id = $id;
     $title = 'Create a new screen';
+    $create = true;
   }
-
-
 ?>
+
 <div id="screen-fields">
   <h2><?php print $title; ?></h2>
   <h3>Screen Settings</h3>
 
   <?php
     // Open the form and set the action attribute
-    echo form_open("screen_admin/save/$id");
+    echo form_open("screen_admin/save/$create");
 
     // Create a field set for the screen properties and print them out with
     // labels
@@ -110,7 +103,7 @@
     echo '</ol>';
     
     echo form_fieldset_close();
-  
+
     echo form_submit('submit', 'Save');
     echo form_close();
   ?>
