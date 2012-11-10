@@ -63,8 +63,10 @@ class Update_model extends CI_Model {
    * This function gets all the screen configuration values and puts them
    * into an array.  The array is then returned.
    *
+   * MSC we should probably not have this duplicate the get_screen_values in screen_model.php
    */
   public function get_screen_values($id) {
+    // Get all the screen's configuration values
     $this->db->select('id, MoTh_op, MoTh_cl, Fr_op, Fr_cl, Sa_op, Sa_cl, Su_op, Su_cl, name');
     if($id == 0){
       $q = $this->db->get('screens',1);
@@ -72,6 +74,8 @@ class Update_model extends CI_Model {
     else {
       $q = $this->db->get_where('screens',array('id' => $id));
     }
+
+    // Load the values in to an array that will be used 
 
     if ($q->num_rows() > 0) {
       foreach($q->result() as $row) {

@@ -11,7 +11,8 @@
 class Screen_model extends CI_Model {
 
   //  These variables correspond to the fields in screens table
-  var $id = '';
+  var $id = 0;
+  var $name = '';
   var $MoTh_op = '00:00:00';
   var $MoTh_cl = '24:00:00';
   var $Fr_op = '00:00:00';
@@ -20,7 +21,6 @@ class Screen_model extends CI_Model {
   var $Sa_cl = '24:00:00';
   var $Su_op = '00:00:00';
   var $Su_cl = '24:00:00';
-  var $name = '';
   var $screen_version = 0;
   var $zoom = 1;
   var $lat = 0;
@@ -64,7 +64,7 @@ class Screen_model extends CI_Model {
   public function load_model($id){
     $this->id = $id;
     //Query the screen data
-    $this->db->select('MoTh_op, MoTh_cl, Fr_op, Fr_cl, Sa_op, Sa_cl, Su_op, Su_cl, screen_version, name, zoom, lat, lon, wmata_key');
+    $this->db->select('id, name, MoTh_op, MoTh_cl, Fr_op, Fr_cl, Sa_op, Sa_cl, Su_op, Su_cl, screen_version, zoom, lat, lon, wmata_key');
     $q = $this->db->get_where('screens',array('id' => $id));
 
     if ($q->num_rows() > 0) {
@@ -199,7 +199,7 @@ class Screen_model extends CI_Model {
           foreach($row as $key => $value){
             $blankrow[$key] = '';
           }
-          $row = $blankrow;
+          $row = (object)$blankrow;
           $data['settings'][] = $row;
         }
         else {
@@ -234,7 +234,7 @@ class Screen_model extends CI_Model {
 
   /**
    * Function: save_screen_values
-   * @param int $id - value of the screen whose configuration should be updated
+   * @param bool $create - true if a screen is being created, otherwise false
    *
    * This function takes all the screen values and then writes them to the
    * relevant database tables.  This function is employed whenever someone
@@ -242,11 +242,12 @@ class Screen_model extends CI_Model {
    * write settings, no values are returned.
    *
    */
-  public function save_screen_values($id) {
+  public function save_screen_values($create) {
 
-    $msg = '';
     //Load the model setting into an array that will be written to the db
     $data = array(
+      'id'              => $this->id,
+      'name'            => $this->name,
       'MoTh_op'         => $this->MoTh_op,
       'MoTh_cl'         => $this->MoTh_cl,
       'Fr_op'           => $this->Fr_op,
@@ -255,7 +256,6 @@ class Screen_model extends CI_Model {
       'Sa_cl'           => $this->Sa_cl,
       'Su_op'           => $this->Su_op,
       'Su_cl'           => $this->Su_cl,
-      'name'            => $this->name,
       'screen_version'  => $this->screen_version,
       'zoom'            => $this->zoom,
       'lat'             => $this->lat,
@@ -263,15 +263,12 @@ class Screen_model extends CI_Model {
       'wmata_key'       => $this->wmata_key
     );
     
-    if($id > 0){ // If updating, instead of inserting anew...
-      $this->db->where('id', $id);
-      $this->db->update('screens', $data);
-      $msg = 'success';
-    }
-    else {    // Otherwise, insert anew
+    if($create){
       $this->db->insert('screens',$data);
-      $id = $this->db->insert_id();
-      $msg = 'created';
+    }
+    else {
+      $this->db->where('id', $this->id);
+      $this->db->update('screens', $data);
     }
 
     // For each agency-stop pair, you will need to split out agency names,
@@ -297,12 +294,18 @@ class Screen_model extends CI_Model {
       foreach($stop_pairs as $skey => $svalue){
         $as = explode(':',$svalue);
         $se = explode('-',$as[1]);
+        if(count($se) == 2) {
+          $exclusions = $se[1];
+        }
+        else {
+          $exclusions = null;
+        }
 
         if(isset($k[$skey])){
           $oldpairs[$k[$skey]] = array(
               'agency'    => $as[0],
               'stop_id'   => $se[0],
-              'exclusions'  => $se[1]
+              'exclusions'  => $exclusions
               //'stop_id' => $as[1]
           );
         }
@@ -310,7 +313,7 @@ class Screen_model extends CI_Model {
           $newpairs[] = array(
               'agency'    => $as[0],
               'stop_id'   => $se[0],
-              'exclusions' => $se[1]
+              'exclusions' => $exclusions
               //'stop_id' => $as[1]
           );
         }
@@ -348,7 +351,7 @@ class Screen_model extends CI_Model {
       if(strlen(trim($value)) > 0){
         $blockdata = array (          
           'custom_name' => $this->new_stop_names[$key],
-          'screen_id'   => $id,
+          'screen_id'   => $this->id,
           'column'      => $this->new_stop_columns[$key],
           'position'    => $this->new_stop_positions[$key],
           'custom_body' => $this->new_stop_custom_bodies[$key],
