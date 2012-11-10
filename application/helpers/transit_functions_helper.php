@@ -1,19 +1,5 @@
 <?php
 
-// debug helper
-function d(){
-echo '
-
-';
-    foreach(func_get_args() as $v){
-       error_log(var_export($v,true))
-       ;
-    }
-    echo '
-
-';
-}
-
 /**
  * Function: clean_time
  *

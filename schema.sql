@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.0.4
 -- Dumped by pg_dump version 9.2.0
--- Started on 2012-11-04 15:31:02 EST
+-- Started on 2012-11-09 03:05:27 EST
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -340,12 +340,12 @@ ALTER TABLE ONLY agency_stop
 
 
 --
--- TOC entry 1829 (class 2606 OID 35019)
+-- TOC entry 1829 (class 2606 OID 42986)
 -- Name: screens_blocks; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY blocks
-    ADD CONSTRAINT screens_blocks FOREIGN KEY (screen_id) REFERENCES screens(id);
+    ADD CONSTRAINT screens_blocks FOREIGN KEY (screen_id) REFERENCES screens(id) ON UPDATE CASCADE;
 
 
 --
@@ -360,7 +360,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2012-11-04 15:31:02 EST
+-- Completed on 2012-11-09 03:05:27 EST
 
 --
 -- PostgreSQL database dump complete

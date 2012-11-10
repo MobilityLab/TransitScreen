@@ -102,7 +102,7 @@ class Screen_admin extends CI_Controller {
    *
    */
   public function save($id = 0) {
-
+    
     // Load the screen model
     $this->load->model('screen_model');
 
@@ -136,9 +136,9 @@ class Screen_admin extends CI_Controller {
     $updatevals->save_screen_values($id);
 
     // Redirect the user back to the edit screen to see the changes he just
-    // made.  If he created a new screen, he may be directed back to the
-    // screen listing page.
-    if($id > 0){
+    // made.  If he created a new screen or changed the screen id, he may 
+    // be directed back to the screen listing page.
+    if($updatevals->id == $id){
       redirect("screen_admin/edit/$id");
     }
     else {
