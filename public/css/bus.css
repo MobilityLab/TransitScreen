@@ -15,7 +15,7 @@ float:left; margin-right:10px;}
 .bus_line { text-align:center; width:100%; height:100%; border-top-left-radius: 25px; border-bottom-left-radius: 25px;}
 .bus_line h3 {  font-weight:bold; font-size:250%; text-transform:uppercase; line-height:80px; padding:0; margin:0; color:#ffffff;}
 
-.bus_table_line { min-width:130px; vertical-align:top; }
+.bus_table_line { min-width:130px; vertical-align:top; min-height:1px; overflow:auto;}
 
 
 .bus_table_destination {color:#ffffff; width:100%; border-left:10px solid #000; border-right:10px solid #000; padding-left:10px; padding-right:10px; letter-spacing:1px; vertical-align:middle;}
@@ -33,11 +33,11 @@ td.bus_table_time h3 { padding:0; margin:0; color:#ffcc33; font-weight:bold; fon
 td.bus_table_upcoming h4 { padding:7px 0 0 0; font-size:130%; margin:0; color:#fff;}
 
 
-#bus_table tr { border-bottom: 10px solid #000; }
+#bus_table tr { border-bottom: 10px solid #000;}
 
-.bus_line_wmata { background:#105cb6;}
-.bus_line_art { background:#009370;}
-.bus_line_circulator { background:#CC3333;}
+.bus_line_wmata { background: #105cb6;}
+.bus_line_ART { background: #009370;}
+.bus_line_Circulator { background: #CC3333;}
 
 .bus_line_circ_logo {  background-image:url("../images/circ_logo_trans.png");
 background-size:80px;
@@ -51,21 +51,4 @@ background-position: 25px 6px;
 background-repeat:no-repeat;
 }
 
-
 .bus_min { font-size:70%; color:#ffcc33;}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
