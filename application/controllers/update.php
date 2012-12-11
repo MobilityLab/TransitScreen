@@ -79,7 +79,7 @@ class Update extends CI_Controller {
     unset($screendata['settings'][0]->last_checkin);
 
     // This is an interesting hashing method:  essentially, print out all of the
-    // relevant configuration functions as one big string and has that string.
+    // relevant configuration functions as one big string and hash that string.
     $hash = md5(print_r($screendata,true));
 
     // Return that hash value as JSON

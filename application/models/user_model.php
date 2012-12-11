@@ -18,7 +18,7 @@ class User_model extends CI_Model {
   public $account_type = '';
 
   /*
-   * Generic construtor
+   * Generic constructor
    */
   public function __construct(){
     parent::__construct();
@@ -103,9 +103,9 @@ class User_model extends CI_Model {
    * @return User_model
    *
    * This function validates the user credentials in the class properties
-   * against what's stored in the db.  If the user namd and password match a
+   * against what's stored in the db.  If the user name and password match a
    * record, then the user object is returned with the user name and id as
-   * object properties.  This funciton is necessary to log user, including
+   * object properties.  This function is necessary to log users, including
    * the administrator, in properly.
    *
    */
@@ -119,7 +119,6 @@ class User_model extends CI_Model {
       
       $user = new User_model();
       $user->id = $row->id;
-      //$user->username = $row->username;
       $user->username = $row->email; // current db schema uses email
 
       return $user;

@@ -3,11 +3,14 @@
   // screen_admin controller.  That is where the $rows array is created.
 
   if($rows['settings'][0]->id != 0){
+    // Screen exists, get id and title
     $id = $rows['settings'][0]->id;
     $title = $rows['settings'][0]->name;
     $create = false;
   }
   else {
+    // Create a random ID
+    // MSC need to check that ID doesn't exist yet
     $id = rand(0,999999);
     $rows['settings'][0]->id = $id;
     $title = 'Create a new screen';

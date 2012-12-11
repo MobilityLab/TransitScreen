@@ -40,7 +40,7 @@ class Screen_admin extends CI_Controller {
 
     // Establish a $data variable for passing to a view.  Include the screens in 'rows',
     // the template to load in 'main_content', and any sort of status message in 'msg'.
-    $data['rows'] = $this->screen_model->get_screens_by_user_id();    
+    $data['rows'] = $this->screen_model->get_screens_by_user_id(); // $user_id MSC
     $data['main_content'] = 'screen_listing';
     $data['msg'] = get_verbose_status($msg);
 
@@ -102,13 +102,15 @@ class Screen_admin extends CI_Controller {
    *
    */
   public function save($id = 0) {
-    
+    // MSC check that a new id does not clash with an already-created ID  
+
     // Load the screen model
     $this->load->model('screen_model');
 
     // Create a placeholder screen that will be filled with variables and then saved.
     $updatevals = new Screen_model();
     $updatevals->id = $id;
+    $updatevals->user_id = $this->session->userdata('id');
 
     // Collect all the posted variables from the HTML form into one variable for
     // easier access.  Delete the submit "variable", which is really just the
@@ -116,8 +118,8 @@ class Screen_admin extends CI_Controller {
     $postvars = $this->input->post();
     unset($postvars->submit);
 
-    // For each of the variables, check to see if the variable name ends with _op
-    // or _cl.  If so, these variables are the sleep and wake times for the screen.
+    // For each of the variables, check to see if the variable name ends with _op (opening)
+    // or _cl (closing).  If so, these variables are the sleep and wake times for the screen.
     // We only want to write them if they have values.  Beware that Code Igniter
     // may treat blank submission as an empty string, which cannot be written
     // to a timestamp type in PostgreSQL.

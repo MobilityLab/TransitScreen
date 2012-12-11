@@ -26,6 +26,7 @@ class Screen_model extends CI_Model {
   var $lat = 0;
   var $lon = 0;
   var $wmata_key = '';
+  var $user_id = 0;
   
   // These correspond to the related records in the blocks and agency_stop tables
   var $stop_ids = array();
@@ -147,7 +148,7 @@ class Screen_model extends CI_Model {
   /**
    * Function: get_screens_by_user_id
    * 
-   * @param int $id - the id of the screen owner
+   * @param int $id - the user_id of the screen owner
    * @return array
    *
    * Get a listing of all the screens and return them in an array.  Eventually this 
@@ -155,7 +156,7 @@ class Screen_model extends CI_Model {
    * only to their respective screens.
    *
    */
-  public function get_screens_by_user_id($id = 0){
+  public function get_screens_by_user_id($user_id = 0){
     // Get all the screens' names and sort by the name
     $this->db->order_by('name', 'asc');
     $q = $this->db->get('screens');
@@ -260,11 +261,12 @@ class Screen_model extends CI_Model {
       'zoom'            => $this->zoom,
       'lat'             => $this->lat,
       'lon'             => $this->lon,
-      'wmata_key'       => $this->wmata_key
+      'wmata_key'       => $this->wmata_key,
+      'user_id'         => $this->user_id
     );
     
     if($create){
-      $this->db->insert('screens',$data);
+      $this->db->insert('screens',$data);      
     }
     else {
       $this->db->where('id', $this->id);
