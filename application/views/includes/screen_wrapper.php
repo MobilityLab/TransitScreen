@@ -9,6 +9,7 @@
 ?><html>
   <head>
     <title>Transit Screen</title>
+    <meta name="robots" content="none">
     <script type="text/javascript" src="<?php print base_url(); ?>/public/scripts/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="<?php print base_url(); ?>/public/scripts/jquery.timers-1.2.js"></script>
     
