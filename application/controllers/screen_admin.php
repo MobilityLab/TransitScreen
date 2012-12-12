@@ -110,7 +110,11 @@ class Screen_admin extends CI_Controller {
     // Create a placeholder screen that will be filled with variables and then saved.
     $updatevals = new Screen_model();
     $updatevals->id = $id;
-    $updatevals->user_id = $this->session->userdata('id');
+
+    // Admins can't own screens
+    if (!$this->session->userdata('admin')) {
+      $updatevals->user_id = $this->session->userdata('id');
+    }
 
     // Collect all the posted variables from the HTML form into one variable for
     // easier access.  Delete the submit "variable", which is really just the

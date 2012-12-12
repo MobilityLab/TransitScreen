@@ -40,12 +40,13 @@ class Login extends CI_Controller {
       $data = array(
           'username' => $this->input->post('username'), // or $query->username?
           'id' => $query->id,
+          'admin' => $query->admin,
           'is_logged_in' => true
       );
 
       // Create the user session.
       $this->session->set_userdata($data);
-      
+
       // Redirect the user to the screen admin page.
       redirect('screen_admin');
     }

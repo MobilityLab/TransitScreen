@@ -15,7 +15,7 @@ class User_model extends CI_Model {
   public $id = '';
   public $username = '';
   public $password = '';
-  public $account_type = '';
+  public $admin = 0;
 
   /*
    * Generic constructor
@@ -114,11 +114,12 @@ class User_model extends CI_Model {
     $this->db->where('password', md5($this->input->post('password')));
     $query = $this->db->get('users');
 
-    if($query->num_rows() == 1){
+    if($query->num_rows() == 1) {
       $row = $query->row();
       
       $user = new User_model();
       $user->id = $row->id;
+      $user->admin = $row->admin; // 1 for admin, 0 for regular user
       $user->username = $row->email; // current db schema uses email
 
       return $user;
