@@ -161,3 +161,13 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
+
+##################
+## TransitScreens
+##################
+
+# As instructed in https://github.com/MobilityLab/TransitScreen/wiki/Mac-Local-Setup
+application\config\database.php
+application\config\config.php
+.gitignore
+.gitattributes
