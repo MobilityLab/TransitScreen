@@ -274,9 +274,6 @@ function get_bus_predictions($stop_id,$api_key,$agency,$render = true) {
     case 'circulator':      
       $buses = get_nextbus_predictions($stop_id, 'dc-circulator');      
       break;
-	case 'pgc':      
-      $buses = get_nextbus_predictions($stop_id, 'pgc');      
-      break;
     case 'art':
       $buses = get_connexionz_predictions($stop_id, 'art');
       break;
@@ -329,7 +326,7 @@ function get_metrobus_predictions($stop_id,$api_key){
  * @return array
  *
  * Get the NextBus predictions for this bus stop and return the data in an array.
- * This is what we will use for the DC Circulator and Prince George's County's TheBus.
+ * This is what we will use for the DC Circulator.
  *
  */
 function get_nextbus_predictions($stop_id,$agency_tag){
@@ -337,17 +334,9 @@ function get_nextbus_predictions($stop_id,$agency_tag){
   if($agency_tag == 'dc-circulator'){
     $agency = 'Circulator';
   }
-  elseif($agency_tag == 'pgc'){
-	$agency = 'pgc';
-  }
-  
+
   // Load the XML from the API
-  if($agency_tag == 'dc-circulator'){
-    $busxml = simplexml_load_file("http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=$agency_tag&stopId=$stop_id");
-  }
-  elseif($agency_tag == 'pgc'){
-	$busxml = simplexml_load_file("http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=$agency_tag&$stop_id");
-  }  
+  $busxml = simplexml_load_file("http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=$agency_tag&stopId=$stop_id");  
 
   //foreach predictions
   foreach($busxml->predictions as $pred){  

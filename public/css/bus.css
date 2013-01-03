@@ -38,7 +38,6 @@ td.bus_table_upcoming h4 { padding:7px 0 0 0; font-size:130%; margin:0; color:#f
 .bus_line_wmata { background: #105cb6;}
 .bus_line_ART { background: #009370;}
 .bus_line_Circulator { background: #CC3333;}
-.bus_line_pgc { background: #FFCC33;}
 
 .bus_line_circ_logo {  background-image:url("../images/circ_logo_trans.png");
 background-size:80px;
@@ -49,12 +48,6 @@ background-repeat:no-repeat;
 .bus_line_art_logo {  background-image:url("../images/art_logo_trans_50.png");
 background-size:80px;
 background-position: 25px 6px;
-background-repeat:no-repeat;
-}
-
-.bus_line_pgc_logo {  background-image:url("../images/pgc_logo_trans_50.png");
-background-size:120px;
-background-position: 5px -10px;
 background-repeat:no-repeat;
 }
 

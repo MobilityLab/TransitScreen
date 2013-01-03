@@ -55,11 +55,7 @@ function generate_blocks() {
             logoclass = ' bus_line_circ_logo';
             vehicle.route = '&nbsp;';
           }
-          else if(class_suffix == 'pgc'){
-            logoclass = ' bus_line_pgc_logo';
-			vehicle.route = '&nbsp;';
-          }
-		  else {
+          else {
             logoclass = '';
           }
 
