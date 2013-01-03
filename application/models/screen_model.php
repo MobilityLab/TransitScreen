@@ -411,7 +411,7 @@ class Screen_model extends CI_Model {
    *
    * This function reads the screens sleep and wake times and the current time
    * and day of the week to determine if the screen should be asleep right now
-   * (return true) or if it should be awak (return false).
+   * (return true) or if it should be awake (return false).
    */
   public function is_asleep(){
     $today = date('D');   // Day of week, e.g. Fri
