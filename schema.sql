@@ -38,7 +38,7 @@ CREATE TABLE agency_stop (
     id integer NOT NULL,
     block_id integer,
     agency character varying(25),
-    stop_id character varying(25),
+    stop_id character varying(15),
     exclusions character varying(100)
 );
 
