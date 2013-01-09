@@ -17,12 +17,8 @@ The screen code is highly robust and successful in long-term deployment.
 
 ## Instructions
 
-The code currently requires PHP and a PostgreSQL database. The PHP backend is written on the Code Igniter (CI) platform following a model-view-
-controller (MVC) architecture. The frontend is simple Javascript.
+The code currently requires PHP and a PostgreSQL database. The PHP backend is written on the Code Igniter (CI) platform following a model-view-controller (MVC) architecture. The frontend is simple Javascript.
 
-You will likely need to adjust a few configuration files to get the set-
-up working properly on your system.
-
-The [Transit Screen wiki](https://github.com/MobilityLab/TransitScreen/wiki) explains what to do.
+You will likely need to adjust a few configuration files to get the set-up working properly. Depending on your system, the [Transit Screen wiki](https://github.com/MobilityLab/TransitScreen/wiki) explains what to do.
 
 The database schema is defined in the file schema.sql.
