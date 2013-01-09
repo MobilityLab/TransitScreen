@@ -1,38 +1,28 @@
-The Transit Screen code is in its early stages, so future code changes
-to improve reliability and coding elegance are on the way.  In the
-meantime, here are some instructions to help you get started.
+# TransitScreen: an experimental project from the [Mobility Lab](http://mobilitylab.org) 
 
-All you need to run the code is PHP and and a database.  The code was 
-designed to work with PostgreSQL, but adjusting it for MySQL is not that
-hard.
+![Example Transit Screen](http://images.greatergreaterwashington.org/images/201201/051058-1.png)
 
-The code is written on the Code Igniter platform following a model-view-
-controller (MVC) architecture.  
+## Introduction
 
-If you wish to have predictions for Metrorail and Metrobus
-you will have to obtain a WMATA API key and add it to your screen configuration.
+TransitScreen is a web-based real-time display that shows information about transit options. 
+These include transit arrivals (for multiple modes and agencies at once) and 
+bikeshare availability. 
+
+In real time, the web server queries each transit agency for the arrival predictions 
+for selected stops, then relays the data to the screens. 
+
+The design aims to be information-dense, high contrast, yet clear.
+
+The screen code is highly robust and successful in long-term deployment.
+
+## Instructions
+
+The code currently requires PHP and a PostgreSQL database. The PHP backend is written on the Code Igniter (CI) platform following a model-view-
+controller (MVC) architecture. The frontend is simple Javascript.
 
 You will likely need to adjust a few configuration files to get the set-
-up working properly on your system:
+up working properly on your system.
 
--- application/config/config.php
-	You may need to adjust the base_url and index_page elements. If you are
-	running on localhost, you will definitely need to do this.
+The [Transit Screen wiki](https://github.com/MobilityLab/TransitScreen/wiki) explains what to do.
 
--- application/config/constants.php
-	You may need to change the PUBLICDIR constant to match the
-	location of your public files directory.  Some Code Igniter
-	installation manuals recommend creating rewrites for this 
-	directory, in which case you may need to adjust this accordingly.
-	If you notice that CSS and javascript files aren't loading properly
-	this will be the constant to fix.
-
--- application/config/database.php
-	Here is where you set up your database connection with the appropriate
-	login credentials and database name.  Please note that you will have
-	to set the correct value for $db['default']['dbdriver'], which is set
-	by default to 'postgre'.  If you intend to use MySQL, you will need 
-	to change this value.
-	
-The database schema is defined in the file schema.sql.  If you wish to run
-it on MySQL, you may need to adjust it slightly.
+The database schema is defined in the file schema.sql.
