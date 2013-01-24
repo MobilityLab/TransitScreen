@@ -10,6 +10,8 @@
   <head>
     <title>Transit Screen</title>
     <meta name="robots" content="none">
+    <link rel="shortcut icon" href="<?php print base_url(); ?>/public/images/favicon.ico" />
+    <link rel="apple-touch-icon" href="<?php print base_url(); ?>/public/images/CPlogo.png" />    
     <script type="text/javascript" src="<?php print base_url(); ?>/public/scripts/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="<?php print base_url(); ?>/public/scripts/jquery.timers-1.2.js"></script>
     
@@ -112,6 +114,16 @@
   </head>
   
   <body>
-    
+    <noscript>
+    <div id="noscript-padding"></div>
+    <div id="noscript-warning" style="color:red">Transit Screen requires a JavaScript-enabled browser. <a href="https://www.google.com/support/adsense/bin/answer.py?answer=12654" target="_blank">Not sure how to enable it?</a></div>
+    </noscript>
+    <script type="text/javascript">
+      if( navigator.userAgent.match(/Mobile/i) &&
+          navigator.userAgent.match(/Safari/i)
+        ) {
+             document.title = "Transit Screen";
+          }
+    </script>    
   </body>
 </html>
