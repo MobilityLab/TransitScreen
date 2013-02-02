@@ -45,10 +45,19 @@
             
             $('<iframe />', {
               id:     'frame-' + versionval,
-              class:  frameclass,
+
               src:    '<?php print $callurl; ?>?' + now
             }).appendTo('body');
-            
+
+            if(frameclass.length > 0)
+            {
+                $('#frame-' + versionval).show(); 
+            }
+            if (frameclass== 'hidden')
+            {
+                $('#frame-' + versionval).hide(); 
+            }
+
             frameclass = 'hidden';    
           
             // Wait 20 seconds and call another function to check the status of the new iframe
