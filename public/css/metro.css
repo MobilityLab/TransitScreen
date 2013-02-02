@@ -1,33 +1,39 @@
 /* metro css */
 
 .metro_container {  margin:3% 0 3% 0; }
+
 /* station block */
+
 .metro_location { margin-bottom:10px; clear:both; border-bottom:1px solid #fff; padding-bottom:10px;}
-.metro_location h2 {  color:#ffffff; font-size:150%; } /* station name */
+.metro_location h2 { color:#ffffff; font-size:150%; } /* station name */
 #metro_logo { background:#000; height:25px; width:25px; float:left; margin-right:10px;
 background-image:url("../images/metro_logo_50.png");
 background-size: 25px 25px;
-
 }
 
-
 .metro_line { text-align:center; width:100%; height:100%; border-top-left-radius:10px; border-bottom-left-radius:10px; border-radius:10px; }
-.metro_line h3 {  font-weight:bolder; font-size:150%; text-transform:uppercase; line-height:50px; padding:0; margin:0; }
+.metro_line h3 {  font-weight:bold; font-size:250%; text-transform:uppercase; line-height:90px; padding:0; margin:0; }
 
-/* metro Table */
+/* metro table */
 
-#metro_table { background:#000; width:100%; height:50px;}
+#metro_table { background:#000; width:100%; height:60px;}
 
-.metro_table_line { min-width:80px; border-right:10px;}
-.metro_table_destination { width:100%; border-left:10px solid #000; border-right:10px solid #000; padding-left:10px; padding-right:10px; letter-spacing:1px;	vertical-align:middle;	}
-	
-.metro_table_time { min-width:130px; text-align:center; background:#575757; color:#ffcc33; vertical-align:top;}
+.metro_table_line { min-width:130px; vertical-align:top; min-height:1px; overflow:auto;}
 
-td.metro_table_destination h3 { font-size:180%; font-weight:bold; padding:0; margin:0; }
-td.metro_table_time h3 { padding:0; margin:0; font-weight:bold; font-size:250%; letter-spacing:1px; }
-td.metro_table_time h4 {  font-size:70%; text-transform:uppercase; padding:0; margin:0 0 3px 0;  }
+.metro_table_destination { width:100%; border-left:10px solid #000; border-right:10px solid #000; padding-left:10px; padding-right:10px; letter-spacing:1px; vertical-align:middle;}
+td.metro_table_destination h3 		{ font-size:180%; font-weight:bold; padding:0; margin:0; }
+
+.metro_table_time 		{ min-width:70px; text-align:center; background:#575757;}
+.metro_table_upcoming 	{ min-width:60px; text-align:center; background:#575757; vertical-align:top; padding-top:3px; }
+
+td.metro_table_time h3 		{ font-size:300%; color:#ffcc33; font-weight:bold; line-height:120%; margin:0; padding:0; }
+td.metro_table_upcoming h4 	{ font-size:130%; color:#fff; margin:0; padding:7px 0 0 0; }
 
 #metro_table tr { border-bottom: 10px solid #000; }
+
+.metro_min { font-size:70%; color:#ffcc33;}
+
+.metro_module { height:70px; margin-bottom:1%;}
 
 .transparent {
         zoom: 1;
@@ -35,7 +41,8 @@ td.metro_table_time h4 {  font-size:70%; text-transform:uppercase; padding:0; ma
         opacity: 0.85;
 }
 
-/* colors */
+/* line colors */
+
 .metro_line_orange { background:#efaa49; color:#fff; }
 .metro_line_blue { background:#3f8cda; color:#fff; }
 .metro_line_red { background:#e45340; color:#fff;}

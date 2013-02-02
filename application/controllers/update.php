@@ -174,7 +174,7 @@ class Update extends CI_Controller {
 
               // Get the bus prediction data back.  This get_bus_predictions
               // function covers ART, WMATA, DC Circulator and Prince George's TheBus
-              $set = get_bus_predictions($stop['stop_id'],$wmata_key,$stop['agency'],false);              
+              $set = get_bus_predictions($stop['stop_id'],$wmata_key,$stop['agency']);              
               if(isset($set[0])){
                 // Loop through the results.  If the bus line is not in the
                 // exclusions array, add it to a new set.  We will abandon the
@@ -188,11 +188,8 @@ class Update extends CI_Controller {
               }              
               break;
             case 'subway':              
-              // Get predictions from WMATA for rail station with id 
-              // $stop['stop_id').  The second parameter to over ride platform-
-              // side labelling.  The third parameter tells the function just
-              // to return unrendered data.
-              $vehicles[] = get_rail_predictions($stop['stop_id'],$wmata_key, array (1 => '', 2 => ''), false);
+              // Get predictions from WMATA for rail station with id $stop['stop_id').
+              $vehicles[] = get_rail_predictions($stop['stop_id'],$wmata_key);
               break;
             case 'cabi':
               // For each bike station, get the status.  Notice that the data
@@ -211,9 +208,13 @@ class Update extends CI_Controller {
         // into a single array and sort by time.  Make sure you have actual
         // predictions first!
         if(count($vehicles) > 0){
-          // Combine multi-agency data for buses only.
-          if($this->_get_agency_type($stop['agency']) == 'bus'){
+          if($this->_get_agency_type($stop['agency']) == 'bus') {
+            // Combine multi-agency data for buses only
             $stopdata = combine_agencies($vehicles);
+            $stopdata = $this->_combine_duplicates($stopdata);            
+          }
+          elseif ($this->_get_agency_type($stop['agency']) == 'subway') {
+            $stopdata = $vehicles[0];
             $stopdata = $this->_combine_duplicates($stopdata);            
           }
           else {

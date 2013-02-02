@@ -57,7 +57,7 @@ function generate_blocks() {
           }
           else if(class_suffix == 'pgc'){
             logoclass = ' bus_line_pgc_logo';
-			vehicle.route = '&nbsp;';
+            vehicle.route = '&nbsp;';
           }
           else {
             logoclass = '';
@@ -73,23 +73,16 @@ function generate_blocks() {
           vout += split_destination(vehicle.agency, vehicle.destination);
           vout += '     </td>';
           $.each(vehicle.predictions, function(p, prediction) {
-            // For the first prediction
+            // 1st prediction
             if(p == 0) {
               vout += '     <td class="' + classname_base + '_table_time">';
               vout += '       <h3>' + prediction + '</h3>';
-
-              if(blocks[key].type == 'bus') {
-                vout += '       <span class="bus_min">MINUTE' + pluralize(prediction) + '</span>';
-              }
-                 
-              if(blocks[key].type == 'subway') {
-                vout += '       <h4>MINUTE' + pluralize(prediction) + '</h4>';
-              }
-
+              vout += '       <span class="' + classname_base + '_min">MINUTE' + pluralize(prediction) + '</span>';
               vout += '     </td>';
             }
             
-            if(p > 0 && p < 3) {
+            // 2nd & 3rd predictions
+            if(p >= 1 && p <= 2) {
               subsequent += '       <h4>' + prediction + '</h4>';
             }
 
@@ -98,16 +91,13 @@ function generate_blocks() {
           vout += '     <td class="' + classname_base + '_table_upcoming">' + subsequent + '</td>';
           vout += '   </tr>';
           
-          //console.log(blocks[key].name + ': ' + vcount + ' / ' + buslimit);
-
+          // Get rid of buses over block limit
           if(blocks[key].type == 'bus' && (vcount >= buslimit)){
             vout = '';
           }
 
           output += vout;
-
           vcount++;
-
         }
       });
       output += '   </table>';

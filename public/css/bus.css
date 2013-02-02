@@ -1,39 +1,43 @@
+/* bus css */
+
 .bus_stop_container {  margin:3% 0 3% 0; }
+
+/* station block */
 
 .bus_location { margin-bottom:10px; clear:both; border-bottom:1px solid #fff; padding-bottom:10px;}
 .bus_location h2 {  color:#ffffff; font-size:150%; } /* station name */
-#bus_logo { background:#000; height:30px; width:30px; background-image:url("../images/bus_logo_50.png");
+#bus_logo { background:#000; height:30px; width:30px; float:left; margin-right:10px;
+background-image:url("../images/bus_logo_50.png");
 background-size: 30px 30px;
-float:left; margin-right:10px;}
-
-.bus_module { height:70px; margin-bottom:1%;}
-
-/* bus Table */
-
-#bus_table { background:#000; width:100%; height:60px;}
+}
 
 .bus_line { text-align:center; width:100%; height:100%; border-top-left-radius: 25px; border-bottom-left-radius: 25px;}
 .bus_line h3 {  font-weight:bold; font-size:250%; text-transform:uppercase; line-height:80px; padding:0; margin:0; color:#ffffff;}
 
+/* bus table */
+
+#bus_table { background:#000; width:100%; height:60px;}
+
 .bus_table_line { min-width:130px; vertical-align:top; min-height:1px; overflow:auto;}
 
-
 .bus_table_destination {color:#ffffff; width:100%; border-left:10px solid #000; border-right:10px solid #000; padding-left:10px; padding-right:10px; letter-spacing:1px; vertical-align:middle;}
+td.bus_table_destination h4 		{ font-size:180%; font-weight:bold; padding:0; margin:0; }
+td.bus_table_destination_small h4 	{ font-size:140%; font-weight:bold; padding:0; margin:0; }
+td.bus_table_destination h3 		{ font-size:100%; font-weight:bold; padding:0; margin:0 0 5px 0; }
 
-td.bus_table_destination h4 { font-size:180%; font-weight:bold; padding:0; margin:0; }
-td.bus_table_destination_small h4 { font-size:140%; font-weight:bold; padding:0; margin:0; }
+.bus_table_time 	{ min-width:70px; text-align:center; background:#575757;}
+.bus_table_upcoming { min-width:60px; text-align:center; background:#575757; vertical-align:top; padding-top:3px; }
 
-td.bus_table_destination h3 { font-size:100%; font-weight:bold; padding:0; margin:0 0 5px 0; }
-
-
-.bus_table_time { min-width:70px; text-align:center; background:#575757;}
-td.bus_table_time h3 { padding:0; margin:0; color:#ffcc33; font-weight:bold; font-size:300%; line-height:120%;}
-
-.bus_table_upcoming { min-width:60px; text-align:center; vertical-align:top; background:#575757; padding-top:3px; }
-td.bus_table_upcoming h4 { padding:7px 0 0 0; font-size:130%; margin:0; color:#fff;}
-
+td.bus_table_time h3 	 { font-size:300%; color:#ffcc33; font-weight:bold; line-height:120%; margin:0; padding:0; }
+td.bus_table_upcoming h4 { font-size:130%; color:#fff; margin:0; padding:7px 0 0 0; }
 
 #bus_table tr { border-bottom: 10px solid #000;}
+
+.bus_module { height:70px; margin-bottom:1%;}
+
+.bus_min { font-size:70%; color:#ffcc33;}
+
+/* agency colors */
 
 .bus_line_wmata { background: #105cb6;}
 .bus_line_ART { background: #009370;}
@@ -57,5 +61,3 @@ background-size:120px;
 background-position: 5px -10px;
 background-repeat:no-repeat;
 }
-
-.bus_min { font-size:70%; color:#ffcc33;}

@@ -1,57 +1,6 @@
 <?php
 
 /**
- * Function: clean_time
- *
- * @param mixed $m
- * @return string
- *
- * This function takes in a train arrival time and converts it into something
- * easier to read.
- */
-function clean_time($m){
-  switch (trim($m)){
-    case '':
-      return;
-    case 1:
-      return '1 <span>min </span>';
-    case 'ARR':
-    case 0:
-      return 'arriving';
-    case '-1':
-      return 'boarding';
-    default:
-      return $m . ' <span>mins</span>';
-  }
-}
-
-/**
- * Function: clean_station
- *
- * @param string $s
- * @return string
- *
- * Gets a line destination abbreviation and returns a more human-readable version.
- *
- */
-function clean_station($s){
-  switch($s) {
-    case 'NewCrltn':
-      return 'New Carrollton';
-    case 'W Fls Ch':
-      return 'W Falls Church';
-    case 'Frnconia':
-      return 'Franconia-Springfield';
-    case 'Grosvenor-Strathmore':
-      return 'Grosvenor';
-    case 'No Passenger':
-      return '(Closed train)';
-    default:
-      return $s;
-  }
-}
-
-/**
  * Function: clean_destination
  * @param string $s
  * @return string
@@ -87,70 +36,43 @@ function clean_destination($s){
   return $s;
 }
 
-
-function render_bus($bus){
-  return '<div class="item agency-' . $bus['agency'] . '">
-            <div class="route">' . $bus['route'] . '</div>
-            <div class="destination">' . clean_destination($bus['destination']) . '</div>
-            <div class="countdown">' . clean_time($bus['prediction']) . '</div>
-          </div>';
-}
-function render_trains($train) {
-  return
-    '<div class="item mins-away-' . $train['prediction'] . ' line-' . $train['line'] . '">
-      <div class="line-disc"></div>
-      <div class="destination">' . clean_station($train['destination']) . '</div>
-      <div class="countdown">' . clean_time($train['prediction']) . '</div>
-     </div>';
-}
-
 /**
  * Function: get_rail_predictions
  * @param int $station_id - the WMATA station id
  * @param string $api_key - the WMATA API key
- * @param array $group_names - optional platform side names
- * @param bool $render - whether this function should rending or just return data
- * @return mixed - the returned array (data) or string (rendered)
+ * @return mixed - the returned array (data)
  *
  * This function gets the rail predictions from the WMATA API, formats the data
  * nicely and returns the data.
  *
  */
-function get_rail_predictions($station_id, $api_key, array $group_names, $render = true){
+function get_rail_predictions($station_id, $api_key){
   $trains = array();
-
-
-  for($gr = 1; $gr <= count($group_names); $gr++) {
-    $traingroup[$gr] = '';
-  }
 
   // Load the train prediction XML from the API
   $railxml = simplexml_load_file("http://api.wmata.com/StationPrediction.svc/GetPrediction/$station_id?api_key=$api_key");
   $predictions = $railxml->Trains->AIMPredictionTrainInfo;
 
-  // For each prediction, but the data into an array to return
+  // For each prediction, put the data into an array to return
   for($t = 0; $t < count($predictions); $t++){
   
     $newitem['stop_name'] = (string) $predictions[$t]->LocationName;
     $newitem['agency'] = 'metrorail';
     $newitem['route'] = (string) $predictions[$t]->Line;  
     $newitem['destination'] = (string) $predictions[$t]->DestinationName;
-    $newitem['predictions'] = array();
 
-    // Prediction 'ARR' will become 0 and 'BRD' predictions will be omitted
-    switch ((string) $predictions[$t]->Min) {
-      case 'ARR':
-        $newitem['predictions'][] = 0;
-        break;
-      case 'BRD':
-        //$newitem['predictions'][] = 0;
-        break;
-      default:
-        $newitem['predictions'][] = (int) $predictions[$t]->Min;
-    }
-
-    if($newitem['destination'] != '' && $newitem['route'] != 'No' && count($newitem['predictions']) > 0){
-      $trains[] = $newitem;
+    // Ignore "No passengers" and no destination
+    if (($newitem['destination'] != '') && ($newitem['route'] != 'No')) { 
+      switch ((string) $predictions[$t]->Min) {
+        case 'ARR':
+        case 'BRD':
+          // Predictions 'ARR' and 'BRD' will be omitted
+          // $newitem['prediction'] = 0;
+          break;
+        default:
+          $newitem['prediction'] = (int) $predictions[$t]->Min;
+          $trains[] = $newitem;
+      }
     }
   }
 
@@ -158,66 +80,12 @@ function get_rail_predictions($station_id, $api_key, array $group_names, $render
   foreach($trains as $key => $row){
     $r[$key] = $row['route'];
     $d[$key] = $row['destination'];
-    $p[$key] = $row['predictions'];
+    $p[$key] = $row['prediction'];
   }
   array_multisort($p, SORT_ASC, $r, SORT_ASC, $d, SORT_ASC, $trains);
 
-  // The new screen system does not render the data here, so this is a vestige.
-  // Just return the data.
-  if($render) {
-    foreach($trains as $train){
-      $traingroup[$train['group']] .= render_trains($train, $group_names);
-    }
-    return $traingroup;
-  }
-  else {
-    return $trains;
-  }
+  return $trains;
 }
-
-/*
- * Function: assemble_stop_array
- * @param array $stops - an array of the agency-stop pairs for one block
- * @param string $api_key - the API key for the agency (in this case WMATA)
- * @param int $max - listing maximum
- * @return array - the buses sorted by prediction, regardless of agency
- *
- * This function takes an array of bus predictions for a single stop and sorts
- * the predictions by the prediction time, regardless of agency.  The newly sorted
- * array is returned.
- 
-function assemble_stop_array(array $stops, $api_key, $max = 4){
-  $buses = array();
-  $out = '';
-
-  // For each agency-stop pair in this block, get the predictions
-  foreach($stops as $key => $value){
-    $busgroups[] = get_bus_predictions($value, $api_key, $key, false);
-  }
-  for($g = 0; $g < count($busgroups); $g++) {
-    $buses = array_merge($buses,$busgroups[$g]);
-  }
-
-  // We have the bus prediction data grouped by agency, but it needs to be sorted
-  // by prediction time, regarless of agency.  This loop and array_multisort will
-  // handle that.
-  foreach($buses as $key => $row){
-    $r[$key] = $row['route'];
-    $d[$key] = $row['destination'];
-    $p[$key] = $row['prediction'];
-    $a[$key] = $row['agency'];
-    $s[$key] = $row['stop_name'];
-  }
-  array_multisort($p, SORT_ASC, $r, SORT_DESC, $d, SORT_ASC, $buses);
-
-  $limit = min(count($buses),$max);
-
-  for($b = 0; $b < $limit; $b++){
-    $out .= render_bus($buses[$b]);
-  }
-  return $out;
-}
-*/
 
 /**
  * Function: combine_agencies
@@ -256,33 +124,32 @@ function combine_agencies(array $busgroups, $max = 99) {
  * @param mixed $stop_id - the stop id
  * @param string $api_key - the API key for the agency
  * @param string $agency - the agency id
- * @param bool $render - whether to render the data or just return the data
  * @return mixed - array of data (unrendered) or a string (rendered)
  *
  *
  */
-function get_bus_predictions($stop_id,$api_key,$agency,$render = true) {
+function get_bus_predictions($stop_id,$api_key,$agency) {
   $out = '';
 
   // Call the different API function based on the agency name.
   switch ($agency) {
     case 'wmata':
     case 'metrobus':
-      $buses = get_metrobus_predictions($stop_id, $api_key);      
+      $out = get_metrobus_predictions($stop_id, $api_key);      
       break;
     case 'dc-circulator':
     case 'circulator':      
-      $buses = get_nextbus_predictions($stop_id, 'dc-circulator');      
+      $out = get_nextbus_predictions($stop_id, 'dc-circulator');      
       break;
 	case 'pgc':      
-      $buses = get_nextbus_predictions($stop_id, 'pgc');      
+      $out = get_nextbus_predictions($stop_id, 'pgc');      
       break;
     case 'art':
-      $buses = get_connexionz_predictions($stop_id, 'art');
+      $out = get_connexionz_predictions($stop_id, 'art');
       break;
   }  
 
-  return $buses;  
+  return $out;    
 }
 
 /**
@@ -336,19 +203,13 @@ function get_nextbus_predictions($stop_id,$agency_tag){
 
   if($agency_tag == 'dc-circulator'){
     $agency = 'Circulator';
+    $busxml = simplexml_load_file("http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=$agency_tag&stopId=$stop_id");  
   }
   elseif($agency_tag == 'pgc'){
-	$agency = 'pgc';
+	  $agency = 'pgc';
+    $busxml = simplexml_load_file("http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=$agency_tag&$stop_id");
   }
 
-  // Load the XML from the API
-  if($agency_tag == 'dc-circulator'){
-  $busxml = simplexml_load_file("http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=$agency_tag&stopId=$stop_id");  
-
-  }
-  elseif($agency_tag == 'pgc'){
-	$busxml = simplexml_load_file("http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=$agency_tag&$stop_id");
-  }  
   //foreach predictions
   foreach($busxml->predictions as $pred){  
     $stopname = (string) $pred->attributes()->stopTitle;
