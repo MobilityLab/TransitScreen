@@ -149,7 +149,7 @@ function get_rail_predictions($station_id, $api_key, array $group_names, $render
         $newitem['predictions'][] = (int) $predictions[$t]->Min;
     }
 
-    if($newitem['destination'] != '' && count($newitem['predictions']) > 0){
+    if($newitem['destination'] != '' && $newitem['route'] != 'No' && count($newitem['predictions']) > 0){
       $trains[] = $newitem;
     }
   }
