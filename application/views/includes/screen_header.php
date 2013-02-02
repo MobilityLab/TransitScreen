@@ -21,14 +21,28 @@
 
     <style type="text/css">
       body { background:#000000; margin:20px 20px 0 20px; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;}
+
+      /* 1 column layout */
       #one-col { width:98%; margin:0 auto 0 auto;}
 
+      /* 2 column layout */
       .total-cols-2 .col {
         width: 48%;
-        float: left;        
+        float: left;
+      }
+      .total-cols-2 #col-1 {
+        margin-right: 32px;
       }
 
-      .total-cols-2 #col-1 {
+      /* 3 column layout */
+      .total-cols-3 .col {
+        width: 31%;
+        float: left;
+      }
+      .total-cols-3 #col-1 {
+        margin-right: 32px;
+      }
+      .total-cols-3 #col-2 {
         margin-right: 32px;
       }
 
@@ -36,10 +50,11 @@
         vertical-align: middle;
         line-height: 1em;
       }
-      
+
       body {
         zoom: <?php print $zoom; ?>;
       }
+
     </style>
 
   </head>
