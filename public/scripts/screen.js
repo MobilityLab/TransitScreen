@@ -255,7 +255,6 @@ function pluralize(num) {
 
 function refresh_data() {
   var now = Math.round(new Date().getTime() / 1000);  
-  
   // query the server for the new data
   //$.getJSON("http://localhost/index.php/update/json/" + screen_id,function(json){
   //$.getJSON("../../update/json/" + screen_id,function(json){

@@ -209,11 +209,12 @@ class Update extends CI_Controller {
         // predictions first!
         if(count($vehicles) > 0){
           if($this->_get_agency_type($stop['agency']) == 'bus') {
-            // Combine multi-agency data for buses only
+            // Combine multi-agency data for buses, then combine same routes
             $stopdata = combine_agencies($vehicles);
             $stopdata = $this->_combine_duplicates($stopdata);            
           }
           elseif ($this->_get_agency_type($stop['agency']) == 'subway') {
+            // Combine same routes data for subway
             $stopdata = $vehicles[0];
             $stopdata = $this->_combine_duplicates($stopdata);            
           }
