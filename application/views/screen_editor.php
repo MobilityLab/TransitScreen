@@ -44,7 +44,8 @@
         'metrobus'      =>  'Metrobus (WMATA)',
         'metrorail'     =>  'Metrorail (WMATA)',
         'dc-circulator' =>  'Circulator',
-		'pgc'           =>  'pgc',
+    		'pgc'           =>  'pgc',
+        'umd'           =>  'umd',
         'art'           =>  'ART'
     );
 

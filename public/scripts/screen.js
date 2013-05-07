@@ -59,6 +59,10 @@ function generate_blocks() {
             logoclass = ' bus_line_pgc_logo';
             vehicle.route = '&nbsp;';
           }
+          else if(class_suffix == 'umd'){
+            logoclass = ' bus_line_umd_logo';
+            vehicle.route = '&nbsp;';
+          }
           else {
             logoclass = '';
           }

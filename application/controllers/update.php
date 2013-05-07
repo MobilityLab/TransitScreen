@@ -173,7 +173,7 @@ class Update extends CI_Controller {
               $newset = array();
 
               // Get the bus prediction data back.  This get_bus_predictions
-              // function covers ART, WMATA, DC Circulator and Prince George's TheBus
+              // function covers ART, WMATA, DC Circulator, Prince George's TheBus and Shuttle UM
               $set = get_bus_predictions($stop['stop_id'],$wmata_key,$stop['agency']);              
               if(isset($set[0])){
                 // Loop through the results.  If the bus line is not in the
@@ -361,7 +361,8 @@ class Update extends CI_Controller {
     switch(strtolower($agency)){
       case 'metrobus':
       case 'art':
-	  case 'pgc':
+      case 'pgc':
+      case 'umd': 
       case 'circulator':
       case 'dc-circulator':
         return 'bus';
