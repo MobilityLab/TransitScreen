@@ -1,5 +1,7 @@
 # TransitScreen
 
+TransitScreen: a project from the [Mobility Lab](http://mobilitylab.org)  
+
 ![Example Transit Screen](http://images.greatergreaterwashington.org/images/201201/051058-1.png)
 
 ## Introduction
